@@ -11,4 +11,10 @@ DISABLE_NON_ESSENTIAL_MODEL_CALLS = "1"
 CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC = "1"
 
 [tasks.inspect]
-run = "npx @modelcontextprotocol/inspector -- uv run python ./mcp_server/server.py"
+run = "npx @modelcontextprotocol/inspector --transport http --url http://localhost:8000/mcp"
+
+[tasks.run_server]
+run = "uv run mcp_server/server.py"
+
+[tasks.run_client]
+run = "uv run mcp_client/client.py"

@@ -18,16 +18,14 @@ uv pip install -e .  # Install package in editable mode (needed for tests)
 
 ### Running
 ```bash
-# Run the client (connects to server and demonstrates tool calls)
-uv run python mcp_client/client.py
-
-# Run the server (stdio-based, meant to be called by client)
+# Terminal 1: Start the HTTP server (listens on http://127.0.0.1:8000)
 uv run python mcp_server/server.py
 
-# Using example scripts
-uv run python examples/run_client.py
-uv run python examples/run_server.py
+# Terminal 2: Run the client (connects to HTTP server)
+uv run python mcp_client/client.py
 ```
+
+**Note**: The server must be running before the client can connect. The server listens on `http://127.0.0.1:8000/mcp` by default.
 
 ### Testing
 ```bash
@@ -59,26 +57,30 @@ uv run ruff check --fix .
 ## Architecture
 
 ### Communication Pattern
-- **Transport**: The MCP protocol uses stdio (standard input/output) for communication between client and server
-- **Protocol**: JSON-RPC based protocol for tool discovery and execution
+- **Transport**: The MCP protocol uses HTTP with Streamable HTTP for communication between client and server
+- **Protocol**: JSON-RPC based protocol for tool discovery and execution over HTTP POST/GET requests
 - **Async**: Both client and server are fully asynchronous using asyncio
+- **Streaming**: Supports SSE (Server-Sent Events) for real-time streaming responses
 
 ### Server (`mcp_server/server.py`)
 - Creates an MCP Server instance with a name identifier
 - Implements two decorators:
   - `@server.list_tools()`: Returns available tools and their schemas
   - `@server.call_tool()`: Handles tool execution based on name and arguments
-- Runs using `stdio_server()` context manager for stdio transport
+- Runs as an HTTP server using Starlette (ASGI) and `StreamableHTTPSessionManager`
 - Tools are defined with JSON schemas for input validation
+- Listens on `http://127.0.0.1:8000/mcp` by default
+- Supports stateful sessions (clients maintain session IDs across requests)
 
 ### Client (`mcp_client/client.py`)
-- Connects to the server using `StdioServerParameters` (command + args)
+- Connects to the HTTP server using `streamable_http_client(url)`
 - Uses `AsyncExitStack` to manage multiple async context managers
 - Session lifecycle:
-  1. Create stdio transport
-  2. Initialize ClientSession
+  1. Connect to HTTP server URL
+  2. Initialize ClientSession with read/write streams
   3. Call `session.initialize()`
   4. Use `session.list_tools()` and `session.call_tool()`
+- Automatically handles HTTP requests and SSE streaming responses
 
 ### Adding New Tools
 To add a new tool to the server:
@@ -93,7 +95,8 @@ Tools must return a list of content dictionaries:
 ```
 
 ## Key Dependencies
-- `mcp>=1.0.0`: Official MCP SDK providing Server, ClientSession, and stdio transport
+- `mcp>=1.0.0`: Official MCP SDK providing Server, ClientSession, and HTTP transports
+  - Includes: httpx, httpx-sse, starlette, uvicorn, sse-starlette for HTTP transport
 - `pytest-asyncio`: For testing async code
 
 ## Configuration Files

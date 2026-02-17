@@ -1,10 +1,14 @@
 """Simple MCP Server implementation."""
 
 import asyncio
+import contextlib
 
 from mcp.server import Server
-from mcp.server.stdio import stdio_server
+from mcp.server.streamable_http_manager import StreamableHTTPSessionManager
 from mcp.types import Tool
+from starlette.applications import Starlette
+from starlette.routing import Mount
+import uvicorn
 
 # Create server instance
 server = Server("simple-mcp-server")
@@ -61,13 +65,31 @@ async def call_tool(name: str, arguments: dict) -> list[dict]:
 
 
 async def main():
-    """Run the MCP server."""
-    async with stdio_server() as (read_stream, write_stream):
-        await server.run(
-            read_stream,
-            write_stream,
-            server.create_initialization_options(),
-        )
+    """Run the MCP server over HTTP."""
+    # Create session manager for handling HTTP transport
+    manager = StreamableHTTPSessionManager(server, stateless=False)
+
+    # Define lifespan to manage the session manager lifecycle
+    @contextlib.asynccontextmanager
+    async def lifespan(app):
+        async with manager.run():
+            yield
+
+    # Create Starlette ASGI application
+    app = Starlette(
+        routes=[Mount("/mcp", app=manager.handle_request)],
+        lifespan=lifespan,
+    )
+
+    # Run the server with uvicorn
+    config = uvicorn.Config(
+        app,
+        host="127.0.0.1",
+        port=8000,
+        log_level="info",
+    )
+    server_instance = uvicorn.Server(config)
+    await server_instance.serve()
 
 
 if __name__ == "__main__":

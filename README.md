@@ -21,24 +21,12 @@ The client connects to the server and demonstrates tool calls:
 uv run python mcp_client/client.py
 ```
 
-Or using the example script:
-
-```bash
-uv run python examples/run_client.py
-```
-
 ### Running the server standalone
 
 The server runs using stdio transport:
 
 ```bash
 uv run python mcp_server/server.py
-```
-
-Or using the example script:
-
-```bash
-uv run python examples/run_server.py
 ```
 
 ## Available Tools
@@ -69,5 +57,4 @@ uv run ruff check .
 
 - `mcp_server/` - MCP server implementation
 - `mcp_client/` - MCP client implementation
-- `examples/` - Example scripts for running client and server
 - `tests/` - Test suite

@@ -3,22 +3,21 @@
 import asyncio
 from contextlib import AsyncExitStack
 
-from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import stdio_client
+from mcp import ClientSession
+from mcp.client.streamable_http import streamable_http_client
 
 
 async def run_client():
     """Run the MCP client to interact with the server."""
-    server_params = StdioServerParameters(
-        command="python",
-        args=["mcp_server/server.py"],
-    )
+    # Server URL for HTTP transport
+    url = "http://127.0.0.1:8000/mcp"
 
     async with AsyncExitStack() as stack:
-        # Connect to server
-        stdio_transport = await stack.enter_async_context(stdio_client(server_params))
-        stdio, write = stdio_transport
-        session = await stack.enter_async_context(ClientSession(stdio, write))
+        # Connect to HTTP server
+        read_stream, write_stream, get_session_id = await stack.enter_async_context(
+            streamable_http_client(url)
+        )
+        session = await stack.enter_async_context(ClientSession(read_stream, write_stream))
 
         # Initialize session
         await session.initialize()
