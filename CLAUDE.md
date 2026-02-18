@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a simple MCP (Model Context Protocol) implementation in Python demonstrating client-server communication. The codebase is intentionally kept minimal and straightforward.
+This is an MCP (Model Context Protocol) implementation in Python demonstrating client-server communication with real-world data integration. The server provides tools to search and filter technical conferences from the [developers-conferences-agenda](https://github.com/scraly/developers-conferences-agenda) repository.
 
 ## Development Commands
 
@@ -63,12 +63,11 @@ uv run ruff check --fix .
 - **Streaming**: Supports SSE (Server-Sent Events) for real-time streaming responses
 
 ### Server (`mcp_server/server.py`)
-- Creates an MCP Server instance with a name identifier
-- Implements two decorators:
-  - `@server.list_tools()`: Returns available tools and their schemas
-  - `@server.call_tool()`: Handles tool execution based on name and arguments
-- Runs as an HTTP server using Starlette (ASGI) and `StreamableHTTPSessionManager`
-- Tools are defined with JSON schemas for input validation
+- Uses `FastMCP` from the `mcp.server.fastmcp` package for quick server setup
+- Tools are defined using the `@mcp.tool()` decorator on simple Python functions
+- Function parameters automatically define the tool's input schema
+- Function docstrings become tool descriptions
+- Runs as an HTTP server using `mcp.run(transport="streamable-http")`
 - Listens on `http://127.0.0.1:8000/mcp` by default
 - Supports stateful sessions (clients maintain session IDs across requests)
 
@@ -84,18 +83,69 @@ uv run ruff check --fix .
 
 ### Adding New Tools
 To add a new tool to the server:
-1. Add tool definition in `list_tools()` with name, description, and inputSchema
-2. Add tool handler in `call_tool()` matching the tool name
-3. Return list of content dictionaries with `type` and `text` fields
+1. Define a function with type hints for parameters
+2. Add the `@mcp.tool()` decorator
+3. Return a string or structured data
+4. The function name becomes the tool name
+5. Type hints define the input schema automatically
+6. For async operations (like HTTP requests), use `async def`
 
-### Tool Response Format
-Tools must return a list of content dictionaries:
+Example:
 ```python
-[{"type": "text", "text": "Your response here"}]
+@mcp.tool()
+def multiply(x: int, y: int) -> str:
+    """Multiplies two numbers together."""
+    return f"The product of {x} and {y} is {x * y}."
 ```
 
+For async tools with external data:
+```python
+@mcp.tool()
+async def fetch_data(query: str) -> str:
+    """Fetch data from an external API."""
+    async with httpx.AsyncClient() as client:
+        response = await client.get(f"https://api.example.com/{query}")
+        return response.text
+```
+
+## Data Sources
+
+### Conference Data
+The server reads conference data **locally** from the [developers-conferences-agenda](https://github.com/scraly/developers-conferences-agenda) repository, which is included as a git submodule in `data/developers-conferences-agenda/`.
+
+**Data Source**: The server parses the `README.md` file in the submodule using a custom markdown parser (`mcp_server/markdown_parser.py`) that extracts:
+- Conference names, dates, and locations
+- CFP (Call for Papers) links and deadlines
+- Event URLs and metadata
+
+**Why Local Data?**
+- No external API dependencies
+- Faster response times (no network latency)
+- Works offline
+- Full control over data freshness
+
+**Updating Conference Data**:
+```bash
+# Update the submodule to get the latest conferences
+cd data/developers-conferences-agenda
+git pull origin main
+cd ../..
+```
+
+**Alternative**: The data is also available via public APIs if needed:
+- Conferences: `https://developers.events/all-events.json`
+- CFPs: `https://developers.events/all-cfps.json`
+
+Conference data structure:
+- `name`: Event name
+- `date`: Array of timestamps (start and end)
+- `city`, `country`, `location`: Geographic information
+- `hyperlink`: Event website
+- `cfp`: Object containing CFP link and deadline (`untilDate` is timestamp)
+- `tags`: Array of topic tags
+
 ## Key Dependencies
-- `mcp>=1.0.0`: Official MCP SDK providing Server, ClientSession, and HTTP transports
+- `mcp>=1.0.0`: Official MCP SDK providing FastMCP, ClientSession, and HTTP transports
   - Includes: httpx, httpx-sse, starlette, uvicorn, sse-starlette for HTTP transport
 - `pytest-asyncio`: For testing async code
 

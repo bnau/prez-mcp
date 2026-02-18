@@ -31,10 +31,22 @@ uv run python mcp_server/server.py
 
 ## Available Tools
 
-The server provides two simple tools:
+The server provides 3 tools:
 
-- **echo**: Echoes back a provided message
-- **add**: Adds two numbers together
+### Conference Tools
+- **search_conferences_by_date**: Search for tech conferences within a date range
+  - Parameters: `start_date` (YYYY-MM-DD), `end_date` (optional, YYYY-MM-DD)
+  - Returns: List of conferences happening in the specified period
+
+- **search_conferences_by_city**: Search for conferences in a specific city
+  - Parameters: `city` (string, case-insensitive)
+  - Returns: List of conferences in the matching city
+
+- **search_conferences_by_cfp**: Search for conferences with open Call for Papers
+  - Parameters: `start_date` (optional, YYYY-MM-DD), `end_date` (optional, YYYY-MM-DD)
+  - Returns: List of conferences with CFPs, optionally filtered by deadline date
+
+Conference data is sourced from [developers-conferences-agenda](https://github.com/scraly/developers-conferences-agenda) via the [developers.events](https://developers.events) API.
 
 ## Testing
 

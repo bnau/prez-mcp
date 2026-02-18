@@ -24,23 +24,42 @@ async def run_client():
 
         # List available tools
         tools_list = await session.list_tools()
-        print("Available tools:")
+        print("=" * 80)
+        print("AVAILABLE TOOLS")
+        print("=" * 80)
         for tool in tools_list.tools:
             print(f"  - {tool.name}: {tool.description}")
         print()
 
-        # Call echo tool
-        echo_result = await session.call_tool("echo", {"message": "Hello, MCP!"})
-        print("Echo tool result:")
-        for content in echo_result.content:
-            print(f"  {content.text}")
+        # Search conferences by date
+        print("=" * 80)
+        print("TEST: Search Conferences by Date (June 2026)")
+        print("=" * 80)
+        date_result = await session.call_tool(
+            "search_conferences_by_date", {"start_date": "2026-06-01", "end_date": "2026-06-30"}
+        )
+        for content in date_result.content:
+            print(f"{content.text}")
         print()
 
-        # Call add tool
-        add_result = await session.call_tool("add", {"a": 42, "b": 8})
-        print("Add tool result:")
-        for content in add_result.content:
-            print(f"  {content.text}")
+        # Search conferences by city
+        print("=" * 80)
+        print("TEST: Search Conferences by City (Paris)")
+        print("=" * 80)
+        city_result = await session.call_tool("search_conferences_by_city", {"city": "Paris"})
+        for content in city_result.content:
+            print(f"{content.text}")
+        print()
+
+        # Search conferences with CFPs
+        print("=" * 80)
+        print("TEST: Search Conferences with Open CFPs (until March 2026)")
+        print("=" * 80)
+        cfp_result = await session.call_tool(
+            "search_conferences_by_cfp", {"start_date": "2026-01-01", "end_date": "2026-03-31"}
+        )
+        for content in cfp_result.content:
+            print(f"{content.text}")
 
 
 async def main():

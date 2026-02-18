@@ -1,5 +1,5 @@
 """MCP Server package."""
 
-from .server import server
+from .server import mcp
 
-__all__ = ["server"]
+__all__ = ["mcp"]
