@@ -36,7 +36,7 @@ async def run_client():
         print("TEST: Search Conferences by Date (June 2026)")
         print("=" * 80)
         date_result = await session.call_tool(
-            "search_conferences_by_date", {"start_date": "2026-06-01", "end_date": "2026-06-30"}
+            "search_conferences", {"min_date": "2026-06-01", "max_date": "2026-06-30"}
         )
         for content in date_result.content:
             print(f"{content.text}")
@@ -44,23 +44,12 @@ async def run_client():
 
         # Search conferences by city
         print("=" * 80)
-        print("TEST: Search Conferences by City (Paris)")
+        print("TEST: Search Conferences by Country (France)")
         print("=" * 80)
-        city_result = await session.call_tool("search_conferences_by_city", {"city": "Paris"})
+        city_result = await session.call_tool("search_conferences", {"country": "France"})
         for content in city_result.content:
             print(f"{content.text}")
         print()
-
-        # Search conferences with CFPs
-        print("=" * 80)
-        print("TEST: Search Conferences with Open CFPs (until March 2026)")
-        print("=" * 80)
-        cfp_result = await session.call_tool(
-            "search_conferences_by_cfp", {"start_date": "2026-01-01", "end_date": "2026-03-31"}
-        )
-        for content in cfp_result.content:
-            print(f"{content.text}")
-
 
 async def main():
     """Main entry point."""
