@@ -51,6 +51,7 @@ async def run_client():
             print(f"{content.text}")
         print()
 
+
 async def main():
     """Main entry point."""
     try:

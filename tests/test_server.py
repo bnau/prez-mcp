@@ -1,6 +1,6 @@
 """Unit tests for the MCP server tools."""
 
-from datetime import datetime
+from datetime import date, datetime
 from unittest.mock import patch
 
 import pytest
@@ -82,13 +82,15 @@ class TestSearchConferences:
         ):
             result = search_conferences()
 
-            # Should include all conferences with dates
-            assert "Found 5 conferences (all)" in result
-            assert "PyCon France 2026" in result
-            assert "DevOps Days Berlin" in result
-            assert "JS Conf USA" in result
-            assert "React Summit France" in result
-            assert "Conference Without Date" in result
+            # Should include all conferences
+            assert len(result) == 5
+
+            conf_names = [c["name"] for c in result]
+            assert "PyCon France 2026" in conf_names
+            assert "DevOps Days Berlin" in conf_names
+            assert "JS Conf USA" in conf_names
+            assert "React Summit France" in conf_names
+            assert "Conference Without Date" in conf_names
 
     def test_search_by_country(self, mock_conferences):
         """Test filtering conferences by country."""
@@ -98,11 +100,13 @@ class TestSearchConferences:
         ):
             result = search_conferences(country="France")
 
-            assert "Found 2 conferences (in France)" in result
-            assert "PyCon France 2026" in result
-            assert "React Summit France" in result
-            assert "DevOps Days Berlin" not in result
-            assert "JS Conf USA" not in result
+            assert len(result) == 2
+
+            conf_names = [c["name"] for c in result]
+            assert "PyCon France 2026" in conf_names
+            assert "React Summit France" in conf_names
+            assert "DevOps Days Berlin" not in conf_names
+            assert "JS Conf USA" not in conf_names
 
     def test_search_by_country_case_insensitive(self, mock_conferences):
         """Test country filter is case-insensitive."""
@@ -112,8 +116,10 @@ class TestSearchConferences:
         ):
             result = search_conferences(country="france")
 
-            assert "Found 2 conferences" in result
-            assert "PyCon France 2026" in result
+            assert len(result) == 2
+
+            conf_names = [c["name"] for c in result]
+            assert "PyCon France 2026" in conf_names
 
     def test_search_by_country_partial_match(self, mock_conferences):
         """Test country filter allows partial matches."""
@@ -123,8 +129,10 @@ class TestSearchConferences:
         ):
             result = search_conferences(country="Ger")
 
-            assert "Found 1 conference" in result
-            assert "DevOps Days Berlin" in result
+            assert len(result) == 1
+
+            conf_names = [c["name"] for c in result]
+            assert "DevOps Days Berlin" in conf_names
 
     def test_search_by_min_date(self, mock_conferences):
         """Test filtering conferences by minimum date."""
@@ -132,13 +140,14 @@ class TestSearchConferences:
             "mcp_server.server.parser_service.get_conferences",
             return_value=mock_conferences,
         ):
-            result = search_conferences(min_date="2026-06-01")
+            result = search_conferences(min_date=date(2026, 6, 1))
 
             # Should include conferences ending on or after 2026-06-01
-            assert "React Summit France" in result  # June 5-6
-            assert "JS Conf USA" in result  # August 20-22
-            assert "PyCon France 2026" not in result  # May 15-17
-            assert "DevOps Days Berlin" not in result  # March 10-11
+            conf_names = [c["name"] for c in result]
+            assert "React Summit France" in conf_names  # June 5-6
+            assert "JS Conf USA" in conf_names  # August 20-22
+            assert "PyCon France 2026" not in conf_names  # May 15-17
+            assert "DevOps Days Berlin" not in conf_names  # March 10-11
 
     def test_search_by_max_date(self, mock_conferences):
         """Test filtering conferences by maximum date."""
@@ -146,13 +155,14 @@ class TestSearchConferences:
             "mcp_server.server.parser_service.get_conferences",
             return_value=mock_conferences,
         ):
-            result = search_conferences(max_date="2026-05-31")
+            result = search_conferences(max_date=date(2026, 5, 31))
 
             # Should include conferences starting on or before 2026-05-31
-            assert "PyCon France 2026" in result  # May 15-17
-            assert "DevOps Days Berlin" in result  # March 10-11
-            assert "JS Conf USA" not in result  # August 20-22
-            assert "React Summit France" not in result  # June 5-6
+            conf_names = [c["name"] for c in result]
+            assert "PyCon France 2026" in conf_names  # May 15-17
+            assert "DevOps Days Berlin" in conf_names  # March 10-11
+            assert "JS Conf USA" not in conf_names  # August 20-22
+            assert "React Summit France" not in conf_names  # June 5-6
 
     def test_search_by_date_range(self, mock_conferences):
         """Test filtering conferences by date range."""
@@ -160,13 +170,14 @@ class TestSearchConferences:
             "mcp_server.server.parser_service.get_conferences",
             return_value=mock_conferences,
         ):
-            result = search_conferences(min_date="2026-05-01", max_date="2026-06-30")
+            result = search_conferences(min_date=date(2026, 5, 1), max_date=date(2026, 6, 30))
 
             # Should include conferences between May and June
-            assert "PyCon France 2026" in result  # May 15-17
-            assert "React Summit France" in result  # June 5-6
-            assert "DevOps Days Berlin" not in result  # March 10-11
-            assert "JS Conf USA" not in result  # August 20-22
+            conf_names = [c["name"] for c in result]
+            assert "PyCon France 2026" in conf_names  # May 15-17
+            assert "React Summit France" in conf_names  # June 5-6
+            assert "DevOps Days Berlin" not in conf_names  # March 10-11
+            assert "JS Conf USA" not in conf_names  # August 20-22
 
     def test_search_by_country_and_date_range(self, mock_conferences):
         """Test combining country and date range filters."""
@@ -175,13 +186,15 @@ class TestSearchConferences:
             return_value=mock_conferences,
         ):
             result = search_conferences(
-                country="France", min_date="2026-06-01", max_date="2026-12-31"
+                country="France", min_date=date(2026, 6, 1), max_date=date(2026, 12, 31)
             )
 
             # Should only include React Summit France (June, in France)
-            assert "Found 1 conference" in result
-            assert "React Summit France" in result
-            assert "PyCon France 2026" not in result  # Too early (May)
+            assert len(result) == 1
+
+            conf_names = [c["name"] for c in result]
+            assert "React Summit France" in conf_names
+            assert "PyCon France 2026" not in conf_names  # Too early (May)
 
     def test_search_filters_conferences_without_dates(self, mock_conferences):
         """Test that conferences without dates are excluded when date filters are applied."""
@@ -189,10 +202,11 @@ class TestSearchConferences:
             "mcp_server.server.parser_service.get_conferences",
             return_value=mock_conferences,
         ):
-            result = search_conferences(min_date="2026-01-01")
+            result = search_conferences(min_date=date(2026, 1, 1))
 
             # Conference without dates should not be included
-            assert "Conference Without Date" not in result
+            conf_names = [c["name"] for c in result]
+            assert "Conference Without Date" not in conf_names
 
     def test_search_no_results(self, mock_conferences):
         """Test when no conferences match the filters."""
@@ -202,7 +216,7 @@ class TestSearchConferences:
         ):
             result = search_conferences(country="Antarctica")
 
-            assert "Found 0 conferences (in Antarctica)" in result
+            assert len(result) == 0
 
     def test_search_results_sorted_by_date(self, mock_conferences):
         """Test that results are sorted by conference start date."""
@@ -213,14 +227,13 @@ class TestSearchConferences:
             result = search_conferences()
 
             # Extract conference names in order they appear
-            lines = result.split("\n")
-            conf_lines = [line for line in lines if line.startswith("•")]
+            conf_names = [c["name"] for c in result]
 
             # Should be sorted chronologically
-            assert "DevOps Days Berlin" in conf_lines[0]  # March
-            assert "PyCon France 2026" in conf_lines[1]  # May
-            assert "React Summit France" in conf_lines[2]  # June
-            assert "JS Conf USA" in conf_lines[3]  # August
+            assert conf_names[0] == "DevOps Days Berlin"  # March
+            assert conf_names[1] == "PyCon France 2026"  # May
+            assert conf_names[2] == "React Summit France"  # June
+            assert conf_names[3] == "JS Conf USA"  # August
 
     def test_search_formats_dates_correctly(self, mock_conferences):
         """Test that dates are formatted correctly in the output."""
@@ -231,8 +244,13 @@ class TestSearchConferences:
             result = search_conferences(country="France")
 
             # Check date formatting for multi-day conference
-            assert "2026-05-15 to 2026-05-17" in result  # PyCon France
-            assert "2026-06-05 to 2026-06-06" in result  # React Summit
+            pycon = next(c for c in result if c["name"] == "PyCon France 2026")
+            assert pycon["date"]["beginning"] == "2026-05-15"
+            assert pycon["date"]["end"] == "2026-05-17"
+
+            react = next(c for c in result if c["name"] == "React Summit France")
+            assert react["date"]["beginning"] == "2026-06-05"
+            assert react["date"]["end"] == "2026-06-06"
 
     def test_search_displays_location_and_link(self, mock_conferences):
         """Test that location and hyperlink are included in output."""
@@ -242,39 +260,44 @@ class TestSearchConferences:
         ):
             result = search_conferences(country="Germany")
 
-            assert "Berlin (Germany)" in result
-            assert "https://devopsdays.berlin" in result
+            devops = result[0]
+            assert devops["location"] == "Berlin (Germany)"
+            assert devops["hyperlink"] == "https://devopsdays.berlin"
 
     def test_search_empty_conference_list(self):
         """Test searching when there are no conferences."""
         with patch("mcp_server.server.parser_service.get_conferences", return_value=[]):
             result = search_conferences()
 
-            assert "Found 0 conferences (all)" in result
+            assert len(result) == 0
 
-    def test_search_filter_description(self, mock_conferences):
-        """Test that the filter description is correct."""
+    def test_search_by_tags(self, mock_conferences):
+        """Test filtering by tags."""
         with patch(
             "mcp_server.server.parser_service.get_conferences",
             return_value=mock_conferences,
         ):
-            # Test all filter combinations
-            result1 = search_conferences()
-            assert "(all)" in result1
+            result = search_conferences(tags="python")
 
-            result2 = search_conferences(min_date="2026-01-01")
-            assert "(from 2026-01-01)" in result2
+            assert len(result) == 1
 
-            result3 = search_conferences(max_date="2026-12-31")
-            assert "(until 2026-12-31)" in result3
+            conf_names = [c["name"] for c in result]
+            assert "PyCon France 2026" in conf_names
 
-            result4 = search_conferences(country="France")
-            assert "(in France)" in result4
+    def test_search_by_multiple_tags(self, mock_conferences):
+        """Test filtering by multiple tags."""
+        with patch(
+            "mcp_server.server.parser_service.get_conferences",
+            return_value=mock_conferences,
+        ):
+            result = search_conferences(tags="javascript,devops")
 
-            result5 = search_conferences(
-                min_date="2026-01-01", max_date="2026-12-31", country="France"
-            )
-            assert "(from 2026-01-01 until 2026-12-31 in France)" in result5
+            assert len(result) == 3
+
+            conf_names = [c["name"] for c in result]
+            assert "JS Conf USA" in conf_names
+            assert "React Summit France" in conf_names
+            assert "DevOps Days Berlin" in conf_names
 
     def test_search_handles_conference_without_location(self):
         """Test handling conferences with missing location data."""
@@ -291,8 +314,8 @@ class TestSearchConferences:
         with patch("mcp_server.server.parser_service.get_conferences", return_value=[conf]):
             result = search_conferences()
 
-            assert "Mystery Conference" in result
-            assert "N/A" in result  # Should show N/A for missing location
+            mystery = result[0]
+            assert mystery["name"] == "Mystery Conference"
 
     def test_search_date_overlap_logic(self):
         """Test that date range overlap logic works correctly."""
@@ -312,21 +335,24 @@ class TestSearchConferences:
 
         with patch("mcp_server.server.parser_service.get_conferences", return_value=[conf]):
             # Search range: March 1-14 (before conference) - should NOT match
-            result1 = search_conferences(min_date="2026-03-01", max_date="2026-03-14")
-            assert "Found 0 conferences" in result1
+            result1 = search_conferences(min_date=date(2026, 3, 1), max_date=date(2026, 3, 14))
+            assert len(result1) == 0
 
             # Search range: March 16-20 (overlaps with conference) - should match
-            result2 = search_conferences(min_date="2026-03-16", max_date="2026-03-20")
-            assert "Test Conference" in result2
+            result2 = search_conferences(min_date=date(2026, 3, 16), max_date=date(2026, 3, 20))
+            conf_names2 = [c["name"] for c in result2]
+            assert "Test Conference" in conf_names2
 
             # Search range: March 18-31 (after conference) - should NOT match
-            result3 = search_conferences(min_date="2026-03-18", max_date="2026-03-31")
-            assert "Found 0 conferences" in result3
+            result3 = search_conferences(min_date=date(2026, 3, 18), max_date=date(2026, 3, 31))
+            assert len(result3) == 0
 
             # Search range: March 10-16 (overlaps start) - should match
-            result4 = search_conferences(min_date="2026-03-10", max_date="2026-03-16")
-            assert "Test Conference" in result4
+            result4 = search_conferences(min_date=date(2026, 3, 10), max_date=date(2026, 3, 16))
+            conf_names4 = [c["name"] for c in result4]
+            assert "Test Conference" in conf_names4
 
             # Search range: March 1-31 (fully contains) - should match
-            result5 = search_conferences(min_date="2026-03-01", max_date="2026-03-31")
-            assert "Test Conference" in result5
+            result5 = search_conferences(min_date=date(2026, 3, 1), max_date=date(2026, 3, 31))
+            conf_names5 = [c["name"] for c in result5]
+            assert "Test Conference" in conf_names5
