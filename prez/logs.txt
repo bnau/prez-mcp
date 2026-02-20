@@ -1,0 +1,249 @@
+msg="completion request" prompt="<|start_header_id|>system<|end_header_id|>
+
+Cutting Knowledge Date: December 2023
+
+When you receive a tool call response, use the output to format an answer to the orginal user question.
+
+You are a helpful assistant with tool calling capabilities.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+Given the following functions, please respond with a JSON for a function call with its proper arguments that best answers the given prompt.
+
+Respond in the format {\"name\": function name, \"parameters\": dictionary of argument name and its value}. Do not use variables.
+
+{function <nil> {cfp__search_conferences 
+Search for conferences with optional filters.
+
+Args:
+    min_date: Optional minimum conference date in format YYYY-MM-DD
+    max_date: Optional maximum conference date in format YYYY-MM-DD
+    country: Optional country name to filter by (case-insensitive partial match)
+
+Returns:
+    List of matching conferences
+ {object <nil> <nil> [] {\"country\":{\"type\":\"\"},\"max_date\":{\"type\":\"\"},\"min_date\":{\"type\":\"\"}}}}}
+
+Quelles sont les conférences en France en avril 2026?<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+"
+
+
+
+msg="completion request" prompt="<|start_header_id|>system<|end_header_id|>
+
+Cutting Knowledge Date: December 2023
+
+When you receive a tool call response, use the output to format an answer to the orginal user question.
+
+You are a helpful assistant with tool calling capabilities.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+Quelles sont les conférences en France en avril 2026?<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+{\"name\": \"cfp__search_conferences\", \"parameters\": {\"country\":\"France\",\"max_date\":\"2026-12-31\",\"min_date\":\"2026-04-01\"}}<|eot_id|><|start_header_id|>ipython<|end_header_id|>
+
+{\"content\":[{\"type\":\"text\",\"text\":\"Found 50 conferences (from 2026-04-01 until 2026-12-31 in France):\
+\
+• FlowCon France 2026 - 2026-03-31 to 2026-04-01 - Paris (France)\
+  https://www.flowcon.io\
+• AWS Summit Paris - 2026-04-01 - Paris (France)\
+  https://aws.amazon.com/events/summits/paris\
+• Pragma Cannes 2026 - 2026-04-02 - Cannes (France)\
+  https://ethglobal.com/events/pragma-cannes2026\
+• Xen Spring Meetup 2026 - 2026-04-02 to 2026-04-03 - Grenoble (France)\
+  https://xenproject.org/resources/spring-meetup-2026/\
+• PyTorch Conference Europe - 2026-04-07 - Paris (France)\
+  https://events.linuxfoundation.org/pytorch-conference-europe/\
+• Android Makers by droidcon 2026 - 2026-04-09 to 2026-04-10 - Paris (France)\
+  https://androidmakers.droidcon.com/\
+• Drupalcamp Grenoble 2026 - 2026-04-09 to 2026-04-11 - Grenoble (France)\
+  https://www.drupal.fr/drupalcamp-grenoble-2026\
+• MiXiT 2026 - 2026-04-16 to 2026-04-17 - Lyon (France)\
+  https://mixitconf.org\
+• Faiseuses du Web 5 - 2026-04-17 to 2026-04-18 - Dinan (France)\
+  https://faiseusesduweb.eu.org\
+• Devoxx France 2026 - 2026-04-22 to 2026-04-24 - Paris (France)\
+  https://www.devoxx.fr\
+• Lead Innovation Day - Leadership Edition - 2026-05-12 - Paris (France)\
+  https://leadinnovation.day/\
+• La Product Conf Paris 2026 - 2026-05-19 - Paris (France)\
+  https://www.laproductconf.com/paris/lpc\
+• Flupa UX Days 2026 - 2026-05-21 to 2026-05-22 - Paris (France)\
+  https://www.uxdays.eu\
+• AFUP Day 2026 Lille - 2026-05-22 - Lille (France)\
+  https://event.afup.org/afup-day-2026/afup-day-2026-lille\
+• AFUP Day 2026 Paris - 2026-05-22 - Paris (France)\
+  https://event.afup.org/afup-day-2026/afup-day-2026-paris\
+• AFUP Day 2026 Bordeaux - 2026-05-22 - Bordeaux (France)\
+  https://event.afup.org/afup-day-2026/afup-day-2026-bordeaux/\
+• AFUP Day 2026 Lyon - 2026-05-22 - Lyon (France)\
+  https://event.afup.org/afup-day-2026/afup-day-2026-lyon\
+• DevCon 27 : I.A. \\u0026 Vibe Coding - 2026-05-28 - Paris (France)\
+  https://www.programmez.com\
+• Cloud Toulouse 2026 - 2026-05-28 - Toulouse (France)\
+  https://cloudtoulouse.com/\
+• NG Baguette Conf 2026 - 2026-05-29 - Paris (France)\
+  https://ngbaguette.angulardevs.fr/\
+• Agile Tour Strasbourg 2026 - 2026-05-29 - Strasbourg (France)\
+  https://agilestrasbourg.fr/\
+• Agile Tour Rennes 2026 - 2026-06-02 to 2026-06-03 - Rennes (France)\
+  https://agiletour.agilerennes.org/\
+• OW2Con - 2026-06-02 to 2026-06-03 - Paris-Châtillon (France)\
+  https://www.ow2con.org/view/2026/\
+• IA–NA - 2026-06-03 - La Rochelle (France)\
+  https://ia-na.fr\
+• TechReady - 2026-06-05 - Nantes (France)\
+  https://techready.live/\
+• Fork it! - Rouen - 2026-06-05 - Rouen (France)\
+  https://www.forkit.community/events/2026-france-rouen\
+• Polycloud - 2026-06-06 - Montpellier (France)\
+  https://polycloud.fr/\
+• JFTL - 2026-06-09 - Montrouge (France)\
+  https://cftl.fr/actualites/jftl/\
+• C:\\\\aen\\\\Tech - 2026-06-09 - Caen (France)\
+  https://caen.tech/\
+• DevQuest Niort - 2026-06-11 to 2026-06-12 - Niort (France)\
+  https://www.devquest.fr/\
+• DevLille 2026 - 2026-06-11 to 2026-06-12 - Lille (France)\
+  https://devlille.fr/\
+• Tech F'Est 2026 - 2026-06-12 - Nancy (France)\
+  https://www.tech-fest.dev/\
+• Mobilis In Mobile 2026 - 2026-06-16 - Nantes (France)\
+  https://mobilis-in-mobile.io/\
+• VivaTech - 2026-06-17 to 2026-06-20 - Paris (France)\
+  https://vivatechnology.com\
+• Tech'Work - 2026-06-18 - Lyon (France)\
+  https://techwork.events\
+• Galaxy Community Conference - 2026-06-22 to 2026-06-26 - Clermont-Ferrand (France)\
+  https://galaxyproject.org/events/gcc2026/\
+• Agi'Lille 2026 - 2026-06-24 to 2026-06-25 - Lille (France)\
+  https://agilille.fr\
+• BreizhCamp 2026 - 2026-06-24 to 2026-06-26 - Rennes (France)\
+  https://www.breizhcamp.org\
+• Azur Tech Summer 2026 - 2026-07-02 - Valbonne (France)\
+  https://www.telecom-valley.fr/azurtechsummer/\
+• Sunny Tech - 2026-07-02 to 2026-07-03 - Montpellier (France)\
+  https://sunny-tech.io/\
+• Agile Lyon 2026 - 2026-07-03 - Lyon (France)\
+  https://www.agilelyon.fr/\
+• Riviera Dev - 2026-07-06 to 2026-07-08 - Sophia Antipolis (France)\
+  https://rivieradev.fr/\
+• 4th Tech Summit on Artificial Intelligence \\u0026 Robotics - 2026-08-02 - Paris (France)\
+  https://artificialintelligence.averconferences.com\
+• 4th Tech Summit on AI \\u0026 Robotics - 2026-08-20 to 2026-08-22 - Paris (France) \\u0026 Online\
+  https://artificialintelligence.averconferences.com/\
+• JUG Summer Camp 2026 - 2026-09-04 - La Rochelle (France)\
+  https://www.jugsummercamp.org/\
+• API Platform Conference 2026 - 2026-09-17 to 2026-09-18 - Lille (France)\
+  https://api-platform.com/fr/con/\
+• PlatformCon Live Day Paris 2026 - 2026-09-24 - Paris (France)\
+  https://platformconlive.fr/\
+• WAX 2026 - 2026-10-01 - Marseille (France)\
+  https://www.waxconf.fr/\
+• Volcamp - 2026-10-01 to 2026-10-02 - Clermont-Ferrand (France)\
+  https://www.volcamp.io\
+• Apidays Paris - 2026-12-01 to 2026-12-03 - Paris (France)\
+  https://www.apidays.global/paris\
+\"}],\"structuredContent\":{\"result\":\"Found 50 conferences (from 2026-04-01 until 2026-12-31 in France):\
+\
+• FlowCon France 2026 - 2026-03-31 to 2026-04-01 - Paris (France)\
+  https://www.flowcon.io\
+• AWS Summit Paris - 2026-04-01 - Paris (France)\
+  https://aws.amazon.com/events/summits/paris\
+• Pragma Cannes 2026 - 2026-04-02 - Cannes (France)\
+  https://ethglobal.com/events/pragma-cannes2026\
+• Xen Spring Meetup 2026 - 2026-04-02 to 2026-04-03 - Grenoble (France)\
+  https://xenproject.org/resources/spring-meetup-2026/\
+• PyTorch Conference Europe - 2026-04-07 - Paris (France)\
+  https://events.linuxfoundation.org/pytorch-conference-europe/\
+• Android Makers by droidcon 2026 - 2026-04-09 to 2026-04-10 - Paris (France)\
+  https://androidmakers.droidcon.com/\
+• Drupalcamp Grenoble 2026 - 2026-04-09 to 2026-04-11 - Grenoble (France)\
+  https://www.drupal.fr/drupalcamp-grenoble-2026\
+• MiXiT 2026 - 2026-04-16 to 2026-04-17 - Lyon (France)\
+  https://mixitconf.org\
+• Faiseuses du Web 5 - 2026-04-17 to 2026-04-18 - Dinan (France)\
+  https://faiseusesduweb.eu.org\
+• Devoxx France 2026 - 2026-04-22 to 2026-04-24 - Paris (France)\
+  https://www.devoxx.fr\
+• Lead Innovation Day - Leadership Edition - 2026-05-12 - Paris (France)\
+  https://leadinnovation.day/\
+• La Product Conf Paris 2026 - 2026-05-19 - Paris (France)\
+  https://www.laproductconf.com/paris/lpc\
+• Flupa UX Days 2026 - 2026-05-21 to 2026-05-22 - Paris (France)\
+  https://www.uxdays.eu\
+• AFUP Day 2026 Lille - 2026-05-22 - Lille (France)\
+  https://event.afup.org/afup-day-2026/afup-day-2026-lille\
+• AFUP Day 2026 Paris - 2026-05-22 - Paris (France)\
+  https://event.afup.org/afup-day-2026/afup-day-2026-paris\
+• AFUP Day 2026 Bordeaux - 2026-05-22 - Bordeaux (France)\
+  https://event.afup.org/afup-day-2026/afup-day-2026-bordeaux/\
+• AFUP Day 2026 Lyon - 2026-05-22 - Lyon (France)\
+  https://event.afup.org/afup-day-2026/afup-day-2026-lyon\
+• DevCon 27 : I.A. \\u0026 Vibe Coding - 2026-05-28 - Paris (France)\
+  https://www.programmez.com\
+• Cloud Toulouse 2026 - 2026-05-28 - Toulouse (France)\
+  https://cloudtoulouse.com/\
+• NG Baguette Conf 2026 - 2026-05-29 - Paris (France)\
+  https://ngbaguette.angulardevs.fr/\
+• Agile Tour Strasbourg 2026 - 2026-05-29 - Strasbourg (France)\
+  https://agilestrasbourg.fr/\
+• Agile Tour Rennes 2026 - 2026-06-02 to 2026-06-03 - Rennes (France)\
+  https://agiletour.agilerennes.org/\
+• OW2Con - 2026-06-02 to 2026-06-03 - Paris-Châtillon (France)\
+  https://www.ow2con.org/view/2026/\
+• IA–NA - 2026-06-03 - La Rochelle (France)\
+  https://ia-na.fr\
+• TechReady - 2026-06-05 - Nantes (France)\
+  https://techready.live/\
+• Fork it! - Rouen - 2026-06-05 - Rouen (France)\
+  https://www.forkit.community/events/2026-france-rouen\
+• Polycloud - 2026-06-06 - Montpellier (France)\
+  https://polycloud.fr/\
+• JFTL - 2026-06-09 - Montrouge (France)\
+  https://cftl.fr/actualites/jftl/\
+• C:\\\\aen\\\\Tech - 2026-06-09 - Caen (France)\
+  https://caen.tech/\
+• DevQuest Niort - 2026-06-11 to 2026-06-12 - Niort (France)\
+  https://www.devquest.fr/\
+• DevLille 2026 - 2026-06-11 to 2026-06-12 - Lille (France)\
+  https://devlille.fr/\
+• Tech F'Est 2026 - 2026-06-12 - Nancy (France)\
+  https://www.tech-fest.dev/\
+• Mobilis In Mobile 2026 - 2026-06-16 - Nantes (France)\
+  https://mobilis-in-mobile.io/\
+• VivaTech - 2026-06-17 to 2026-06-20 - Paris (France)\
+  https://vivatechnology.com\
+• Tech'Work - 2026-06-18 - Lyon (France)\
+  https://techwork.events\
+• Galaxy Community Conference - 2026-06-22 to 2026-06-26 - Clermont-Ferrand (France)\
+  https://galaxyproject.org/events/gcc2026/\
+• Agi'Lille 2026 - 2026-06-24 to 2026-06-25 - Lille (France)\
+  https://agilille.fr\
+• BreizhCamp 2026 - 2026-06-24 to 2026-06-26 - Rennes (France)\
+  https://www.breizhcamp.org\
+• Azur Tech Summer 2026 - 2026-07-02 - Valbonne (France)\
+  https://www.telecom-valley.fr/azurtechsummer/\
+• Sunny Tech - 2026-07-02 to 2026-07-03 - Montpellier (France)\
+  https://sunny-tech.io/\
+• Agile Lyon 2026 - 2026-07-03 - Lyon (France)\
+  https://www.agilelyon.fr/\
+• Riviera Dev - 2026-07-06 to 2026-07-08 - Sophia Antipolis (France)\
+  https://rivieradev.fr/\
+• 4th Tech Summit on Artificial Intelligence \\u0026 Robotics - 2026-08-02 - Paris (France)\
+  https://artificialintelligence.averconferences.com\
+• 4th Tech Summit on AI \\u0026 Robotics - 2026-08-20 to 2026-08-22 - Paris (France) \\u0026 Online\
+  https://artificialintelligence.averconferences.com/\
+• JUG Summer Camp 2026 - 2026-09-04 - La Rochelle (France)\
+  https://www.jugsummercamp.org/\
+• API Platform Conference 2026 - 2026-09-17 to 2026-09-18 - Lille (France)\
+  https://api-platform.com/fr/con/\
+• PlatformCon Live Day Paris 2026 - 2026-09-24 - Paris (France)\
+  https://platformconlive.fr/\
+• WAX 2026 - 2026-10-01 - Marseille (France)\
+  https://www.waxconf.fr/\
+• Volcamp - 2026-10-01 to 2026-10-02 - Clermont-Ferrand (France)\
+  https://www.volcamp.io\
+• Apidays Paris - 2026-12-01 to 2026-12-03 - Paris (France)\
+  https://www.apidays.global/paris\
+\"}}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+"
