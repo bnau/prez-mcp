@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 import pytest
 
-from mcp_server.server import search_conferences
+from mcp_server.server import search_conferences, get_cfp, list_conferences_by_month_country
 
 
 class TestSearchConferences:
@@ -356,3 +356,112 @@ class TestSearchConferences:
             result5 = search_conferences(min_date=date(2026, 3, 1), max_date=date(2026, 3, 31))
             conf_names5 = [c["name"] for c in result5]
             assert "Test Conference" in conf_names5
+
+
+class TestCFPResources:
+    """Tests for CFP resources."""
+
+    def test_get_cfp_mcp_returns_content(self):
+        """Test that get_cfp_mcp returns the CFP content."""
+        result = get_cfp("mcp")
+
+        assert isinstance(result, str)
+        assert len(result) > 0
+        assert "MCP en pratique" in result
+        assert "Model Context Protocol" in result
+
+    def test_get_cfp_ide_returns_content(self):
+        """Test that get_cfp_ide returns the CFP content."""
+        result = get_cfp("ide")
+
+        assert isinstance(result, str)
+        assert len(result) > 0
+        assert "Copilot, Cursor" in result
+        assert "assistants de code" in result
+
+    def test_get_cfp_kagent_returns_content(self):
+        """Test that get_cfp_kagent returns the CFP content."""
+        result = get_cfp("kagent")
+
+        assert isinstance(result, str)
+        assert len(result) > 0
+        assert "KAgent" in result
+        assert "KServe" in result
+
+    def test_cfp_resources_contain_references_section(self):
+        """Test that all CFP resources contain a references section."""
+        cfp_mcp = get_cfp("mcp")
+        cfp_ide = get_cfp("ide")
+        cfp_kagent = get_cfp("kagent")
+
+        assert "## Références" in cfp_mcp
+        assert "## Références" in cfp_ide
+        assert "## Références" in cfp_kagent
+
+
+class TestPrompts:
+    """Tests for MCP prompts."""
+
+    def test_list_conferences_by_month_country_june_france(self):
+        """Test the prompt generation for June 2026 in France."""
+        result = list_conferences_by_month_country("2026-06", "France")
+
+        assert isinstance(result, str)
+        # Check that the prompt contains the expected information
+        assert "France" in result
+        assert "June 2026" in result
+        assert "min_date: 2026-06-01" in result
+        assert "max_date: 2026-06-30" in result
+        assert "country: France" in result
+        assert "search_conferences" in result
+
+    def test_list_conferences_by_month_country_december_usa(self):
+        """Test the prompt generation for December 2026 in USA."""
+        result = list_conferences_by_month_country("2026-12", "USA")
+
+        assert isinstance(result, str)
+        assert "USA" in result
+        assert "December 2026" in result
+        assert "min_date: 2026-12-01" in result
+        assert "max_date: 2026-12-31" in result
+        assert "country: USA" in result
+
+    def test_list_conferences_by_month_country_february_leap_year(self):
+        """Test the prompt generation for February in a leap year."""
+        result = list_conferences_by_month_country("2024-02", "Germany")
+
+        assert isinstance(result, str)
+        assert "Germany" in result
+        assert "February 2024" in result
+        assert "min_date: 2024-02-01" in result
+        assert "max_date: 2024-02-29" in result  # Leap year
+
+    def test_list_conferences_by_month_country_february_non_leap_year(self):
+        """Test the prompt generation for February in a non-leap year."""
+        result = list_conferences_by_month_country("2026-02", "Spain")
+
+        assert isinstance(result, str)
+        assert "Spain" in result
+        assert "February 2026" in result
+        assert "min_date: 2026-02-01" in result
+        assert "max_date: 2026-02-28" in result  # Non-leap year
+
+    def test_list_conferences_by_month_country_formatting_instructions(self):
+        """Test that the prompt includes formatting instructions."""
+        result = list_conferences_by_month_country("2026-07", "Japan")
+
+        # Check for table formatting instructions
+        assert "table" in result.lower()
+        assert "Conference Name" in result
+        assert "Date" in result
+        assert "City" in result
+        assert "Tags" in result
+        assert "CFP Deadline" in result
+        assert "Website Link" in result
+
+    def test_list_conferences_by_month_country_suggestion_for_no_results(self):
+        """Test that the prompt includes suggestion for no results."""
+        result = list_conferences_by_month_country("2026-03", "Canada")
+
+        assert "no conferences are found" in result.lower()
+        assert "suggest" in result.lower()

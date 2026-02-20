@@ -31,6 +31,41 @@ async def run_client():
             print(f"  - {tool.name}: {tool.description}")
         print()
 
+        # List available resources
+        resources_list = await session.list_resources()
+        print("=" * 80)
+        print("AVAILABLE RESOURCES")
+        print("=" * 80)
+        for resource in resources_list.resources:
+            print(f"  - {resource.uri}")
+            print(f"    Name: {resource.name}")
+            print(f"    Description: {resource.description}")
+        print()
+
+        # List available prompts
+        prompts_list = await session.list_prompts()
+        print("=" * 80)
+        print("AVAILABLE PROMPTS")
+        print("=" * 80)
+        for prompt in prompts_list.prompts:
+            print(f"  - {prompt.name}: {prompt.description}")
+        print()
+
+        # Read CFP resources
+        print("=" * 80)
+        print("TEST: Read CFP Resources")
+        print("=" * 80)
+        for resource_uri in ["cfp://mcp", "cfp://ide", "cfp://kagent"]:
+            print(f"\n{resource_uri}:")
+            print("-" * 80)
+            resource_result = await session.read_resource(resource_uri)
+            for content in resource_result.contents:
+                # Display first 300 characters of the content
+                text = content.text
+                preview = text[:300] + "..." if len(text) > 300 else text
+                print(preview)
+            print()
+
         # Search conferences by date
         print("=" * 80)
         print("TEST: Search Conferences by Date (June 2026)")
@@ -49,6 +84,19 @@ async def run_client():
         city_result = await session.call_tool("search_conferences", {"country": "France"})
         for content in city_result.content:
             print(f"{content.text}")
+        print()
+
+        # Test the prompt
+        print("=" * 80)
+        print("TEST: Use Prompt to List Conferences (June 2026, France)")
+        print("=" * 80)
+        prompt_result = await session.get_prompt(
+            "list_conferences_by_month_country", {"month": "2026-06", "country": "France"}
+        )
+        print("Generated Prompt:")
+        print("-" * 80)
+        for message in prompt_result.messages:
+            print(f"{message.role.upper()}: {message.content.text}")
         print()
 
 

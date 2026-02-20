@@ -3,9 +3,11 @@
 import copy
 from dataclasses import dataclass
 from datetime import date, datetime
-from typing import Annotated, Optional, Any
+from pathlib import Path
+from typing import Annotated, Any, Optional
 
 from mcp.server.fastmcp import FastMCP
+from mcp.server.fastmcp.resources import FileResource
 from pydantic import Field
 
 try:
@@ -19,6 +21,9 @@ mcp = FastMCP("cfp-server")
 
 # Initialize the markdown parser service
 parser_service = MarkdownParserService()
+
+# CFP subjects directory
+CFP_SUBJECTS_DIR = Path(__file__).parent.parent / "prez" / "sujets_cfp"
 
 
 @dataclass
@@ -34,7 +39,7 @@ class Conference:
 
 
 @mcp.tool(
-    name="search_conferences",
+    name="Search Conferences",
     description=(
         "Search for technical conferences with optional filters. "
         "Returns structured JSON data. "
@@ -144,7 +149,7 @@ def search_conferences(
         if conf_copy.get("cfp") and conf_copy["cfp"].get("untilDate"):
             cfp_ts = conf_copy["cfp"]["untilDate"]
             if cfp_ts:
-                conf_copy["cfp"]["untilDate"]   = datetime.fromtimestamp(cfp_ts).strftime("%Y-%m-%d")
+                conf_copy["cfp"]["untilDate"] = datetime.fromtimestamp(cfp_ts).strftime("%Y-%m-%d")
 
         results.append(conf_copy)
 
@@ -158,6 +163,95 @@ def search_conferences(
     # Return as JSON with metadata
     return results
 
+
+@mcp.prompt(
+    name="List Conferences by Month and Country",
+    description=(
+        "Generate a prompt to list all technical conferences in a specific month and "
+        "country. This prompt helps users discover conferences happening in their "
+        "desired location and time frame."
+    ),
+)
+def list_conferences_by_month_country(
+    month: Annotated[
+        str,
+        Field(description="Month in YYYY-MM format (e.g., '2026-06', '2026-12')"),
+    ],
+    country: Annotated[
+        str,
+        Field(description="Country name (e.g., 'France', 'USA', 'Germany')"),
+    ],
+) -> str:
+    """Generate a prompt to search conferences by month and country."""
+    # Extract year and month from the input
+    year, month_num = month.split("-")
+
+    # Calculate first and last day of the month
+    from calendar import monthrange
+
+    last_day = monthrange(int(year), int(month_num))[1]
+    min_date = f"{year}-{month_num}-01"
+    max_date = f"{year}-{month_num}-{last_day:02d}"
+
+    # Map month number to month name
+    month_names = {
+        "01": "January",
+        "02": "February",
+        "03": "March",
+        "04": "April",
+        "05": "May",
+        "06": "June",
+        "07": "July",
+        "08": "August",
+        "09": "September",
+        "10": "October",
+        "11": "November",
+        "12": "December",
+    }
+    month_name = month_names.get(month_num, month_num)
+
+    return (
+        f"Please search for all technical conferences happening in {country} "
+        f"during {month_name} {year}. Use the search_conferences tool with the "
+        f"following parameters:\n"
+        f"- min_date: {min_date}\n"
+        f"- max_date: {max_date}\n"
+        f"- country: {country}\n\n"
+        f"Then, format the results in a clear table with the following columns:\n"
+        f"- Conference Name\n"
+        f"- Date (start - end)\n"
+        f"- City\n"
+        f"- Tags\n"
+        f"- CFP Deadline (if available)\n"
+        f"- Website Link\n\n"
+        f"If no conferences are found, suggest nearby months or countries with "
+        f"similar tech events."
+    )
+
+
+@mcp.resource(
+    uri="cfp://{theme}",
+    name="CFP Content by Theme",
+    description=("Read CFP content for a given theme. Example: read_resource('cfp://mcp')"),
+    mime_type="text/markdown",
+)
+def get_cfp(theme: str) -> str:
+    cfp_file = CFP_SUBJECTS_DIR / f"{theme}.md"
+    if cfp_file.exists():
+        return cfp_file.read_text(encoding="utf-8")
+    return "CFP not found"
+
+
+for f in list(CFP_SUBJECTS_DIR.glob("*.md")):
+    path = Path(CFP_SUBJECTS_DIR / f"{f.stem}.md").resolve()
+    if path.exists():
+        resource = FileResource(
+            uri=f"file://{path.as_posix()}",
+            path=path,
+            name=f.stem,
+            mime_type="text/markdown",
+        )
+        mcp.add_resource(resource)
 
 if __name__ == "__main__":
     # Stateless server with JSON responses (recommended)
