@@ -60,10 +60,10 @@ uv run ruff check --fix .
 - **Transport**: The MCP protocol uses HTTP with Streamable HTTP for communication between client and server
 - **Protocol**: JSON-RPC based protocol for tool discovery and execution over HTTP POST/GET requests
 - **Async**: Both client and server are fully asynchronous using asyncio
-- **Streaming**: Supports SSE (Server-Sent Events) for real-time streaming responses
+- **Library**: Uses FastMCP 3 - a standalone, simplified MCP implementation
 
 ### Server (`mcp_server/server.py`)
-- Uses `FastMCP` from the `mcp.server.fastmcp` package for quick server setup
+- Uses `FastMCP` from the `fastmcp` package (FastMCP 3)
 - Tools are defined using the `@mcp.tool()` decorator on simple Python functions
 - Function parameters automatically define the tool's input schema
 - Function docstrings become tool descriptions
@@ -72,14 +72,16 @@ uv run ruff check --fix .
 - Supports stateful sessions (clients maintain session IDs across requests)
 
 ### Client (`mcp_client/client.py`)
-- Connects to the HTTP server using `streamable_http_client(url)`
-- Uses `AsyncExitStack` to manage multiple async context managers
-- Session lifecycle:
-  1. Connect to HTTP server URL
-  2. Initialize ClientSession with read/write streams
-  3. Call `session.initialize()`
-  4. Use `session.list_tools()` and `session.call_tool()`
-- Automatically handles HTTP requests and SSE streaming responses
+- Uses `Client` from `fastmcp.client` (FastMCP 3)
+- Simple connection pattern: `Client(url)` where url is the server HTTP endpoint
+- Supports async context manager: `async with client:`
+- Direct method calls:
+  - `await client.list_tools()` - Get available tools
+  - `await client.call_tool(name, args)` - Execute a tool
+  - `await client.list_resources()` - Get available resources
+  - `await client.read_resource(uri)` - Read a resource
+  - `await client.list_prompts()` - Get available prompts
+  - `await client.get_prompt(name, args)` - Get a prompt
 
 ### Adding New Tools
 To add a new tool to the server:
@@ -145,8 +147,8 @@ Conference data structure:
 - `tags`: Array of topic tags
 
 ## Key Dependencies
-- `mcp>=1.0.0`: Official MCP SDK providing FastMCP, ClientSession, and HTTP transports
-  - Includes: httpx, httpx-sse, starlette, uvicorn, sse-starlette for HTTP transport
+- `fastmcp>=3.0.0`: FastMCP 3 - standalone MCP implementation providing FastMCP server and Client
+  - Includes: httpx, uvicorn, starlette for HTTP transport
 - `pytest-asyncio`: For testing async code
 
 ## Configuration Files

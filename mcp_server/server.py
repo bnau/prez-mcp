@@ -6,8 +6,8 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import Annotated, Any, Optional
 
-from mcp.server.fastmcp import FastMCP
-from mcp.server.fastmcp.resources import FileResource
+from fastmcp import FastMCP
+from fastmcp.resources import FileResource
 from pydantic import Field
 
 try:
@@ -39,7 +39,7 @@ class Conference:
 
 
 @mcp.tool(
-    name="Search Conferences",
+    name="search_conferences",
     description=(
         "Search for technical conferences with optional filters. "
         "Returns structured JSON data. "
@@ -165,7 +165,7 @@ def search_conferences(
 
 
 @mcp.prompt(
-    name="List Conferences by Month and Country",
+    name="list_conferences_by_month_and_country",
     description=(
         "Generate a prompt to list all technical conferences in a specific month and "
         "country. This prompt helps users discover conferences happening in their "

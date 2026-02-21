@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Simple MCP (Model Context Protocol) client and server implementation in Python"
 requires-python = ">=3.10"
 dependencies = [
-    "mcp>=1.0.0",
+    "fastmcp>=3.0.0",
 ]
 
 [project.optional-dependencies]
