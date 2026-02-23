@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 import pytest
 
-from mcp_server.server import search_conferences, get_cfp, list_conferences_by_month_country
+from mcp_server.server import get_cfp, list_conferences_by_month_country, search_conferences
 
 
 class TestSearchConferences:
@@ -356,6 +356,125 @@ class TestSearchConferences:
             result5 = search_conferences(min_date=date(2026, 3, 1), max_date=date(2026, 3, 31))
             conf_names5 = [c["name"] for c in result5]
             assert "Test Conference" in conf_names5
+
+    def test_search_by_open_cfp(self):
+        """Test filtering by open CFP status."""
+        # Future CFP deadline (open)
+        future_date = datetime(2027, 12, 31).timestamp()
+        # Past CFP deadline (closed)
+        past_date = datetime(2024, 1, 1).timestamp()
+
+        conferences = [
+            {
+                "name": "Conference with Open CFP",
+                "city": "Paris",
+                "country": "France",
+                "location": "Paris (France)",
+                "hyperlink": "https://open-cfp.com",
+                "date": {
+                    "beginning": int(datetime(2026, 6, 1).timestamp()),
+                    "end": int(datetime(2026, 6, 3).timestamp()),
+                },
+                "tags": ["python"],
+                "cfp": {
+                    "link": "https://open-cfp.com/cfp",
+                    "untilDate": int(future_date),
+                },
+            },
+            {
+                "name": "Conference with Closed CFP",
+                "city": "Berlin",
+                "country": "Germany",
+                "location": "Berlin (Germany)",
+                "hyperlink": "https://closed-cfp.com",
+                "date": {
+                    "beginning": int(datetime(2026, 7, 1).timestamp()),
+                    "end": int(datetime(2026, 7, 3).timestamp()),
+                },
+                "tags": ["devops"],
+                "cfp": {
+                    "link": "https://closed-cfp.com/cfp",
+                    "untilDate": int(past_date),
+                },
+            },
+            {
+                "name": "Conference without CFP",
+                "city": "London",
+                "country": "UK",
+                "location": "London (UK)",
+                "hyperlink": "https://no-cfp.com",
+                "date": {
+                    "beginning": int(datetime(2026, 8, 1).timestamp()),
+                    "end": int(datetime(2026, 8, 3).timestamp()),
+                },
+                "tags": ["javascript"],
+            },
+        ]
+
+        with patch(
+            "mcp_server.server.parser_service.get_conferences",
+            return_value=conferences,
+        ):
+            # Test cfp_open=True - should only return conferences with open CFPs
+            result_open = search_conferences(cfp_open=True)
+            assert len(result_open) == 1
+            assert result_open[0]["name"] == "Conference with Open CFP"
+
+            # Test cfp_open=False - should return all conferences
+            result_all = search_conferences(cfp_open=False)
+            assert len(result_all) == 3
+
+            # Test cfp_open=None (default) - should return all conferences
+            result_default = search_conferences()
+            assert len(result_default) == 3
+
+    def test_search_by_open_cfp_combined_with_other_filters(self):
+        """Test combining CFP open filter with other filters."""
+        future_date = datetime(2027, 12, 31).timestamp()
+
+        conferences = [
+            {
+                "name": "Python Conference with Open CFP in France",
+                "city": "Paris",
+                "country": "France",
+                "location": "Paris (France)",
+                "hyperlink": "https://pycon-fr.com",
+                "date": {
+                    "beginning": int(datetime(2026, 6, 1).timestamp()),
+                    "end": int(datetime(2026, 6, 3).timestamp()),
+                },
+                "tags": ["python"],
+                "cfp": {
+                    "link": "https://pycon-fr.com/cfp",
+                    "untilDate": int(future_date),
+                },
+            },
+            {
+                "name": "JS Conference with Open CFP in France",
+                "city": "Lyon",
+                "country": "France",
+                "location": "Lyon (France)",
+                "hyperlink": "https://jsconf-fr.com",
+                "date": {
+                    "beginning": int(datetime(2026, 7, 1).timestamp()),
+                    "end": int(datetime(2026, 7, 3).timestamp()),
+                },
+                "tags": ["javascript"],
+                "cfp": {
+                    "link": "https://jsconf-fr.com/cfp",
+                    "untilDate": int(future_date),
+                },
+            },
+        ]
+
+        with patch(
+            "mcp_server.server.parser_service.get_conferences",
+            return_value=conferences,
+        ):
+            # Combine CFP open filter with country and tags
+            result = search_conferences(cfp_open=True, country="France", tags="python")
+            assert len(result) == 1
+            assert result[0]["name"] == "Python Conference with Open CFP in France"
 
 
 class TestCFPResources:

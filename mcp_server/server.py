@@ -43,10 +43,10 @@ class Conference:
     description=(
         "Search for technical conferences with optional filters. "
         "Returns structured JSON data. "
-        "Filters include date range, country, and tags. "
+        "Filters include date range, country, tags, and CFP status. "
         "Results include conference metadata such as tags, CFP deadlines, and locations. "
         "Example: search_conferences(min_date='2026-01-01', max_date='2026-12-31', "
-        "country='France', tags='python,ai')"
+        "country='France', tags='python,ai', cfp_open=True)"
     ),
 )
 def search_conferences(
@@ -75,6 +75,16 @@ def search_conferences(
             )
         ),
     ] = None,
+    cfp_open: Annotated[
+        Optional[bool],
+        Field(
+            description=(
+                "Optional filter to only show conferences with open CFPs. "
+                "When True, only returns conferences where the CFP deadline is in the future. "
+                "When False or None, returns all conferences regardless of CFP status."
+            )
+        ),
+    ] = False,
 ) -> list[Any]:
     conferences = parser_service.get_conferences()
 
@@ -91,9 +101,23 @@ def search_conferences(
     if tags:
         tag_filters = [tag.strip().lower() for tag in tags.split(",")]
 
+    # Get current timestamp for CFP filtering
+    current_ts = int(datetime.now().timestamp())
+
     # Filter conferences
     results = []
     for conf in conferences:
+        # Apply CFP open filter
+        if cfp_open:
+            cfp = conf.get("cfp")
+            if not cfp:
+                # No CFP information, skip this conference
+                continue
+            cfp_deadline = cfp.get("untilDate")
+            if not cfp_deadline or cfp_deadline < current_ts:
+                # CFP is closed or no deadline, skip this conference
+                continue
+
         # Apply country filter
         if country:
             conf_country = conf.get("country", "").lower()
