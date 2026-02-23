@@ -253,6 +253,42 @@ def list_conferences_by_month_country(
     )
 
 
+@mcp.prompt(
+    name="find_conferences_for_open_cfps",
+    description=(
+        "Generate a prompt to find technical conferences with open CFPs "
+        "and match them with available CFP submissions. This prompt helps identify "
+        "the best conferences to submit CFPs to based on topic relevance."
+    ),
+)
+def find_conferences_for_open_cfps(
+    country: Annotated[
+        Optional[str],
+        Field(description="Optional country name to filter conferences (e.g., 'France', 'USA')"),
+    ] = None,
+) -> str:
+    """Generate a prompt to search conferences with open CFPs, optionally filtered by country."""
+    country_filter = f" in {country}" if country else ""
+    country_param = f", country='{country}'" if country else ""
+
+    return (
+        f"Please find all technical conferences{country_filter} that currently have open CFPs "
+        "(Call for Papers). Use the search_conferences tool with the parameter "
+        f"cfp_open=True{country_param} to get the list.\n\n"
+        "Your task is to:\n"
+        f"1. Search for conferences with open CFPs{country_filter}\n"
+        "2. For each conference found, analyze its tags and theme\n"
+        "3. Return a structured list of conferences with their details:\n"
+        "   - Conference name\n"
+        "   - Date (start and end)\n"
+        "   - Location (city, country)\n"
+        "   - Tags/Topics\n"
+        "   - CFP deadline\n"
+        "   - Website and CFP submission link\n\n"
+        "Format the output as JSON for easy processing."
+    )
+
+
 @mcp.resource(
     uri="cfp://{theme}",
     name="CFP Content by Theme",

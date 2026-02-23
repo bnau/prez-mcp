@@ -5,6 +5,7 @@ description = "Simple MCP (Model Context Protocol) client and server implementat
 requires-python = ">=3.10"
 dependencies = [
     "fastmcp>=3.0.0",
+    "httpx>=0.27.0",
 ]
 
 [project.optional-dependencies]
