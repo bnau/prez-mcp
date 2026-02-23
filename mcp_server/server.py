@@ -1,6 +1,7 @@
 """Simple MCP Server implementation."""
 
 import copy
+import json
 from dataclasses import dataclass
 from datetime import date, datetime
 from pathlib import Path
@@ -8,6 +9,7 @@ from typing import Annotated, Any, Optional
 
 from fastmcp import FastMCP
 from fastmcp.resources import FileResource
+from fastmcp.server.context import Context
 from pydantic import Field
 
 try:
@@ -45,11 +47,14 @@ class Conference:
         "Returns structured JSON data. "
         "Filters include date range, country, tags, and CFP status. "
         "Results include conference metadata such as tags, CFP deadlines, and locations. "
+        "If match_cfps is True, automatically reads all available CFP files and matches them "
+        "with conferences using AI sampling. "
         "Example: search_conferences(min_date='2026-01-01', max_date='2026-12-31', "
-        "country='France', tags='python,ai', cfp_open=True)"
+        "country='France', tags='python,ai', cfp_open=True, match_cfps=True)"
     ),
 )
-def search_conferences(
+async def search_conferences(
+    ctx: Context,
     min_date: Annotated[
         Optional[date], Field(description="Optional minimum conference date")
     ] = None,
@@ -85,7 +90,30 @@ def search_conferences(
             )
         ),
     ] = False,
-) -> list[Any]:
+    match_cfps: Annotated[
+        Optional[bool],
+        Field(
+            description=(
+                "When True, automatically reads all available CFP files from the server "
+                "and matches them with filtered conferences using AI sampling. "
+                "Results will be grouped by CFP with match_score (0-100) and reasoning fields. "
+                "Returns a dictionary with CFP names as keys and matched conferences as values."
+            )
+        ),
+    ] = False,
+    min_score: Annotated[
+        Optional[int],
+        Field(
+            description=(
+                "Minimum match score threshold (0-100) when using match_cfps. "
+                "Only conferences with score >= min_score will be returned. "
+                "Ignored if match_cfps is False."
+            ),
+            ge=0,
+            le=100,
+        ),
+    ] = 30,
+) -> list[Any] | dict[str, Any]:
     conferences = parser_service.get_conferences()
 
     # Parse date filters if provided
@@ -184,6 +212,111 @@ def search_conferences(
     for conf in results:
         conf.pop("_sort_key", None)
 
+    # If match_cfps is True, read all CFPs and match them with conferences
+    if match_cfps:
+        # Read all CFP files from the directory
+        cfp_matches = {}
+
+        for cfp_file in CFP_SUBJECTS_DIR.glob("*.md"):
+            cfp_name = cfp_file.stem
+            cfp_content = cfp_file.read_text(encoding="utf-8")
+
+            # Extract CFP title from content (first line without #)
+            cfp_lines = cfp_content.split("\n")
+            cfp_title = cfp_lines[0].replace("#", "").strip() if cfp_lines else "Unknown CFP"
+
+            # Prepare conferences summary for analysis
+            conferences_summary = []
+            for conf in results:
+                summary = {
+                    "name": conf["name"],
+                    "tags": conf.get("tags", []),
+                    "location": f"{conf.get('city', 'Unknown')}, {conf.get('country', 'Unknown')}",
+                }
+                conferences_summary.append(summary)
+
+            # Use sampling to analyze matches
+            sampling_prompt = f"""Analyze which conferences match this CFP topic: "{cfp_title}"
+
+CFP excerpt:
+{chr(10).join(cfp_lines[:10])}
+
+Available conferences:
+{json.dumps(conferences_summary, indent=2, ensure_ascii=False)}
+
+For each conference, evaluate the match based on:
+- Conference tags/topics
+- Conference name and theme
+- Relevance to the CFP topic
+
+Respond ONLY with valid JSON (no markdown, no code blocks):
+{{
+  "matches": [
+    {{
+      "conference_name": "exact conference name from the list",
+      "score": 0-100,
+      "reasoning": "brief explanation in French (max 1 sentence)"
+    }}
+  ]
+}}
+
+Important:
+- Only include conferences with score >= {min_score}
+- Be strict about tag relevance
+- Consider broader themes (e.g., "AI" matches "machine learning", "data science")"""
+
+            try:
+                # Use FastMCP sampling with ctx
+                result = await ctx.sample(
+                    messages=sampling_prompt,
+                    temperature=0.3,
+                    max_tokens=4000,
+                )
+
+                # Parse LLM response
+                response_text = result.text if result.text else "{}"
+
+                # Clean markdown code blocks if present
+                response_text = response_text.strip()
+                if response_text.startswith("```"):
+                    lines = response_text.split("\n")
+                    response_text = "\n".join(lines[1:-1]) if len(lines) > 2 else response_text
+
+                analysis = json.loads(response_text)
+                matches = analysis.get("matches", [])
+
+                # Add match scores and reasoning to results for this CFP
+                scored_results = []
+                for match in matches:
+                    conf_name = match.get("conference_name")
+                    # Find the corresponding conference in results
+                    conf = next((c for c in results if c["name"] == conf_name), None)
+                    if conf and match.get("score", 0) >= min_score:
+                        # Add match metadata to conference
+                        conf_with_score = copy.deepcopy(conf)
+                        conf_with_score["match_score"] = match.get("score", 0)
+                        conf_with_score["match_reasoning"] = match.get("reasoning", "")
+                        scored_results.append(conf_with_score)
+
+                # Sort by match score descending
+                scored_results.sort(key=lambda x: x.get("match_score", 0), reverse=True)
+
+                # Store matches for this CFP
+                cfp_matches[cfp_name] = {
+                    "cfp_title": cfp_title,
+                    "matches": scored_results,
+                }
+
+            except Exception as e:
+                # If sampling fails for this CFP, store error
+                cfp_matches[cfp_name] = {
+                    "cfp_title": cfp_title,
+                    "error": f"Failed to analyze matches: {str(e)}",
+                    "matches": [],
+                }
+
+        return cfp_matches
+
     # Return as JSON with metadata
     return results
 
@@ -269,23 +402,26 @@ def find_conferences_for_open_cfps(
 ) -> str:
     """Generate a prompt to search conferences with open CFPs, optionally filtered by country."""
     country_filter = f" in {country}" if country else ""
-    country_param = f", country='{country}'" if country else ""
+    country_param = f"country='{country}'" if country else ""
 
     return (
-        f"Please find all technical conferences{country_filter} that currently have open CFPs "
-        "(Call for Papers). Use the search_conferences tool with the parameter "
-        f"cfp_open=True{country_param} to get the list.\n\n"
-        "Your task is to:\n"
-        f"1. Search for conferences with open CFPs{country_filter}\n"
-        "2. For each conference found, analyze its tags and theme\n"
-        "3. Return a structured list of conferences with their details:\n"
-        "   - Conference name\n"
-        "   - Date (start and end)\n"
-        "   - Location (city, country)\n"
-        "   - Tags/Topics\n"
-        "   - CFP deadline\n"
-        "   - Website and CFP submission link\n\n"
-        "Format the output as JSON for easy processing."
+        f"Find the best technical conferences{country_filter} with open CFPs "
+        "for all available CFP topics.\n\n"
+        "Call the search_conferences tool with:\n"
+        f"- cfp_open: true{', ' + country_param if country_param else ''}\n"
+        "- match_cfps: true\n"
+        "- min_score: 30\n\n"
+        "This will automatically:\n"
+        "1. Filter conferences with open CFPs\n"
+        "2. Read all available CFP files from the server\n"
+        "3. Match each CFP with relevant conferences using AI\n"
+        "4. Return results grouped by CFP with match scores\n\n"
+        "Present the results in a clear format showing:\n"
+        "- Each CFP name and title\n"
+        "- Matching conferences with their scores (0-100)\n"
+        "- The reasoning for each match\n"
+        "- Conference details (date, location, CFP deadline)\n\n"
+        "Use emojis for better readability."
     )
 
 
