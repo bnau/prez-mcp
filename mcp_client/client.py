@@ -5,6 +5,7 @@ import json
 
 import httpx
 from fastmcp.client import Client
+from fastmcp.client.elicitation import ElicitResult
 from fastmcp.client.sampling import RequestContext, SamplingMessage, SamplingParams
 
 
@@ -126,6 +127,55 @@ async def user_confirmation_sampling_handler(
         else:
             print("⚠️  Réponse invalide. Utilisez 'y' ou 'n'.")
 
+
+async def elicitation_handler(prompt: str, response_type: type | None, params, context):
+    """
+    Handler d'élicitation qui demande une réponse y/n à l'utilisateur.
+
+    Ce handler est appelé par le serveur MCP quand il a besoin d'une confirmation
+    ou d'une information de la part de l'utilisateur.
+
+    Args:
+        prompt: Le texte de la question posée par le serveur
+        response_type: Le type de réponse attendu (bool, str, int, None, ou dataclass)
+        params: Paramètres d'élicitation
+        context: Contexte de la requête
+    """
+    print("\n" + "=" * 80)
+    print("❓ Le serveur demande une confirmation")
+    print("=" * 80)
+    print(f"\n{prompt}\n")
+
+    # Boucle pour obtenir une réponse valide
+    while True:
+        answer = input("Répondez (y/n ou 'cancel' pour annuler): ").strip().lower()
+
+        # Annuler l'opération
+        if answer == "cancel":
+            print("⚠️  Opération annulée\n")
+            return ElicitResult(action="cancel")
+
+        # Décliner de répondre
+        if answer == "decline":
+            print("ℹ️  Vous avez décliné de répondre\n")
+            return ElicitResult(action="decline")
+
+        # Réponse oui/non pour type bool
+        if answer in ["y", "yes", "o", "oui"]:
+                print("✅ Réponse: Oui\n")
+                return ElicitResult(action="accept", content=True)
+
+        if answer in ["n", "no", "non"]:
+                print("❌ Réponse: Non\n")
+                return ElicitResult(action="accept", content=False)
+
+        # Pour d'autres types, accepter directement la réponse
+        elif response_type is str:
+            print(f"✅ Réponse: {answer}\n")
+            return ElicitResult(action="accept", content=answer)
+
+        # Réponse invalide
+        print("⚠️  Réponse invalide. Utilisez 'y' pour oui, 'n' pour non.")
 
 
 class LLMOrchestrator:
@@ -293,7 +343,11 @@ class LLMOrchestrator:
 async def run_intelligent_client():
     """Client qui utilise le pattern Prompt -> LLM -> Tool Call."""
     mcp_url = "http://127.0.0.1:8000/mcp"
-    mcp_client = Client(mcp_url, sampling_handler=user_confirmation_sampling_handler)
+    mcp_client = Client(
+        mcp_url,
+        sampling_handler=user_confirmation_sampling_handler,
+        elicitation_handler=elicitation_handler,
+    )
     orchestrator = LLMOrchestrator()
 
     try:

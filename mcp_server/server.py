@@ -301,6 +301,35 @@ Important:
                 # Sort by match score descending
                 scored_results.sort(key=lambda x: x.get("match_score", 0), reverse=True)
 
+                # Pour chaque match, demander à l'utilisateur s'il veut postuler
+                for match in scored_results:
+                    conf_name = match.get("name", "Unknown")
+                    match_score = match.get("match_score", 0)
+
+                    # Utiliser l'élicitation pour demander confirmation
+                    prompt = (
+                        f"Voulez-vous postuler au CFP de la conférence '{conf_name}' "
+                        f"avec votre sujet '{cfp_title}' (score de match: {match_score}/100) ?"
+                    )
+
+                    elicit_result = await ctx.elicit(prompt, response_type=bool)
+
+                    # Ajouter le résultat de l'élicitation au match
+                    if elicit_result.action == "accept":
+                        match["user_wants_to_apply"] = elicit_result.data
+                        if elicit_result.data:
+                            match["application_status"] = f"✅ Vous allez postuler à '{conf_name}'"
+                        else:
+                            match["application_status"] = (
+                                f"❌ Vous ne postulerez pas à '{conf_name}'"
+                            )
+                    elif elicit_result.action == "decline":
+                        match["user_wants_to_apply"] = None
+                        match["application_status"] = "ℹ️ Vous avez décliné de répondre"
+                    else:
+                        match["user_wants_to_apply"] = None
+                        match["application_status"] = "⚠️ Opération annulée"
+
                 # Store matches for this CFP
                 cfp_matches[cfp_name] = {
                     "cfp_title": cfp_title,
