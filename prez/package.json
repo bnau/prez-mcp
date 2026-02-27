@@ -1,0 +1,20 @@
+{
+  "name": "talk-veille-slidev",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "slidev build",
+    "dev": "slidev slides.md",
+    "export": "slidev export"
+  },
+  "dependencies": {
+    "@slidev/cli": "^52.11.0",
+    "@slidev/theme-apple-basic": "^0.25.1",
+    "@slidev/theme-default": "latest",
+    "@slidev/theme-seriph": "latest",
+    "vue": "^3.5.25"
+  },
+  "devDependencies": {
+    "playwright-chromium": "^1.58.2"
+  }
+}

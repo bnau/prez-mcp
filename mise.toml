@@ -1,6 +1,7 @@
 [tools]
 "node" = "latest"
 "npm:copilot-api" = "latest"
+"npm:bun" = "latest"
 
 [env]
 ANTHROPIC_BASE_URL = "http://localhost:4141"

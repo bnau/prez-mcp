@@ -17,6 +17,9 @@ htmlcov/
 dist/
 build/
 
+# Node
+node_modules/
+
 # IDEs
 .idea/
 .vscode/

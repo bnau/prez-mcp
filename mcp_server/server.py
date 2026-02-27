@@ -25,7 +25,7 @@ mcp = FastMCP("cfp-server")
 parser_service = MarkdownParserService()
 
 # CFP subjects directory
-CFP_SUBJECTS_DIR = Path(__file__).parent.parent / "prez" / "sujets_cfp"
+CFP_SUBJECTS_DIR = Path(__file__)  / "sujets_cfp"
 
 
 @dataclass
