@@ -9,276 +9,6 @@ title: Architecture
 layout: default
 section: "02"
 sectionName: "Architecture"
-slideName: "Schéma mental vs réalité"
----
-
-# Ce qu'on imagine
-
-<div style="position: relative; height: 400px; display: flex; align-items: center; justify-content: center;">
-
-<div v-click.hide style="position: absolute; width: 100%; text-align: center;">
-
-```mermaid
-%%{init: {'themeVariables': { 'edgeLabelBackground': 'white'}}}%%
-graph LR
-    User[👤 User] -->|1. Requête| Client[💻 Client]
-    Client -->|2. Demande| LLM[🤖 LLM]
-    LLM -->|3. Réponse| Tools[🔧 Tools]
-
-    style User fill:#e1f5ff
-    style Client fill:#fff4e6
-    style LLM fill:#f3e5f5
-    style Tools fill:#e8f5e9
-
-    linkStyle 0 stroke:white,color:white
-    linkStyle 1 stroke:white,color:white
-    linkStyle 2 stroke:white,color:white
-```
-
-</div>
-
-<div v-click="[1,2]" style="position: absolute; width: 100%; text-align: center;">
-
-```mermaid
-%%{init: {'themeVariables': { 'edgeLabelBackground': 'white'}}}%%
-graph LR
-    User[👤 User] -->|1. Requête| Client[💻 Client]
-    Client -->|2. Demande| LLM[🤖 LLM]
-    LLM -->|3. Réponse| Tools[🔧 Tools]
-
-    style User fill:#e1f5ff
-    style Client fill:#fff4e6
-    style LLM fill:#f3e5f5
-    style Tools fill:#e8f5e9
-
-    linkStyle 1 stroke:white,color:white
-    linkStyle 2 stroke:white,color:white
-```
-
-</div>
-
-<div v-click="[2,3]" style="position: absolute; width: 100%; text-align: center;">
-
-```mermaid
-%%{init: {'themeVariables': { 'edgeLabelBackground': 'white'}}}%%
-graph LR
-    User[👤 User] -->|1. Requête| Client[💻 Client]
-    Client -->|2. Demande| LLM[🤖 LLM]
-    LLM -->|3. Réponse| Tools[🔧 Tools]
-
-    style User fill:#e1f5ff
-    style Client fill:#fff4e6
-    style LLM fill:#f3e5f5
-    style Tools fill:#e8f5e9
-
-    linkStyle 2 stroke:white,color:white
-```
-
-</div>
-
-<div v-click=3 style="position: absolute; width: 100%; text-align: center;">
-
-```mermaid
-%%{init: {'themeVariables': { 'edgeLabelBackground': 'white'}}}%%
-graph LR
-    User[👤 User] -->|1. Requête| Client[💻 Client]
-    Client -->|2. Demande| LLM[🤖 LLM]
-    LLM -->|3. Réponse| Tools[🔧 Tools]
-
-    style User fill:#e1f5ff
-    style Client fill:#fff4e6
-    style LLM fill:#f3e5f5
-    style Tools fill:#e8f5e9
-```
-
-</div>
-
-</div>
-
----
-layout: default
-section: "02"
-sectionName: "Architecture"
-slideName: "La réalité"
----
-
-# Ce qui se passe vraiment
-
-<div style="position: relative; height: 400px; display: flex; align-items: center; justify-content: center;">
-
-<div v-click.hide style="position: absolute; width: 100%; text-align: center;">
-
-```mermaid
-%%{init: {'themeVariables': { 'edgeLabelBackground': 'white'}}}%%
-graph LR
-    User[👤 User] -->|1. Requête| Client[💻 Client]
-    Client -->|2. Appel tool| Tool[🔧 Tool]
-    Tool -->|3. Résultat| Client
-    Client -->|4. Contexte| LLM[🤖 LLM]
-    LLM -->|5. Réponse| Client
-    Client -->|6. Autre tool| Tool
-
-    style User fill:#e1f5ff
-    style Client fill:#fff4e6
-    style Tool fill:#e8f5e9
-    style LLM fill:#f3e5f5
-
-    linkStyle 0 stroke:white,color:white
-    linkStyle 1 stroke:white,color:white
-    linkStyle 2 stroke:white,color:white
-    linkStyle 3 stroke:white,color:white
-    linkStyle 4 stroke:white,color:white
-    linkStyle 5 stroke:white,color:white
-```
-
-</div>
-
-<div v-click="[1,2]" style="position: absolute; width: 100%; text-align: center;">
-
-```mermaid
-%%{init: {'themeVariables': { 'edgeLabelBackground': 'white'}}}%%
-graph LR
-    User[👤 User] -->|1. Requête| Client[💻 Client]
-    Client -->|2. Appel tool| Tool[🔧 Tool]
-    Tool -->|3. Résultat| Client
-    Client -->|4. Contexte| LLM[🤖 LLM]
-    LLM -->|5. Réponse| Client
-    Client -->|6. Autre tool| Tool
-
-    style User fill:#e1f5ff
-    style Client fill:#fff4e6
-    style Tool fill:#e8f5e9
-    style LLM fill:#f3e5f5
-
-    linkStyle 1 stroke:white,color:white
-    linkStyle 2 stroke:white,color:white
-    linkStyle 3 stroke:white,color:white
-    linkStyle 4 stroke:white,color:white
-    linkStyle 5 stroke:white,color:white
-```
-
-</div>
-
-<div v-click="[2,3]" style="position: absolute; width: 100%; text-align: center;">
-
-```mermaid
-%%{init: {'themeVariables': { 'edgeLabelBackground': 'white'}}}%%
-graph LR
-    User[👤 User] -->|1. Requête| Client[💻 Client]
-    Client -->|2. Appel tool| Tool[🔧 Tool]
-    Tool -->|3. Résultat| Client
-    Client -->|4. Contexte| LLM[🤖 LLM]
-    LLM -->|5. Réponse| Client
-    Client -->|6. Autre tool| Tool
-
-    style User fill:#e1f5ff
-    style Client fill:#fff4e6
-    style Tool fill:#e8f5e9
-    style LLM fill:#f3e5f5
-
-    linkStyle 2 stroke:white,color:white
-    linkStyle 3 stroke:white,color:white
-    linkStyle 4 stroke:white,color:white
-    linkStyle 5 stroke:white,color:white
-```
-
-</div>
-
-<div v-click="[3,4]" style="position: absolute; width: 100%; text-align: center;">
-
-```mermaid
-%%{init: {'themeVariables': { 'edgeLabelBackground': 'white'}}}%%
-graph LR
-    User[👤 User] -->|1. Requête| Client[💻 Client]
-    Client -->|2. Appel tool| Tool[🔧 Tool]
-    Tool -->|3. Résultat| Client
-    Client -->|4. Contexte| LLM[🤖 LLM]
-    LLM -->|5. Réponse| Client
-    Client -->|6. Autre tool| Tool
-
-    style User fill:#e1f5ff
-    style Client fill:#fff4e6
-    style Tool fill:#e8f5e9
-    style LLM fill:#f3e5f5
-
-    linkStyle 3 stroke:white,color:white
-    linkStyle 4 stroke:white,color:white
-    linkStyle 5 stroke:white,color:white
-```
-
-</div>
-
-<div v-click="[4,5]" style="position: absolute; width: 100%; text-align: center;">
-
-```mermaid
-%%{init: {'themeVariables': { 'edgeLabelBackground': 'white'}}}%%
-graph LR
-    User[👤 User] -->|1. Requête| Client[💻 Client]
-    Client -->|2. Appel tool| Tool[🔧 Tool]
-    Tool -->|3. Résultat| Client
-    Client -->|4. Contexte| LLM[🤖 LLM]
-    LLM -->|5. Réponse| Client
-    Client -->|6. Autre tool| Tool
-
-    style User fill:#e1f5ff
-    style Client fill:#fff4e6
-    style Tool fill:#e8f5e9
-    style LLM fill:#f3e5f5
-
-    linkStyle 4 stroke:white,color:white
-    linkStyle 5 stroke:white,color:white
-```
-
-</div>
-
-<div v-click="[5,6]" style="position: absolute; width: 100%; text-align: center;">
-
-```mermaid
-%%{init: {'themeVariables': { 'edgeLabelBackground': 'white'}}}%%
-graph LR
-    User[👤 User] -->|1. Requête| Client[💻 Client]
-    Client -->|2. Appel tool| Tool[🔧 Tool]
-    Tool -->|3. Résultat| Client
-    Client -->|4. Contexte| LLM[🤖 LLM]
-    LLM -->|5. Réponse| Client
-    Client -->|6. Autre tool| Tool
-
-    style User fill:#e1f5ff
-    style Client fill:#fff4e6
-    style Tool fill:#e8f5e9
-    style LLM fill:#f3e5f5
-
-    linkStyle 5 stroke:white,color:white
-```
-
-</div>
-
-<div v-click=6 style="position: absolute; width: 100%; text-align: center;">
-
-```mermaid
-%%{init: {'themeVariables': { 'edgeLabelBackground': 'white'}}}%%
-graph LR
-    User[👤 User] -->|1. Requête| Client[💻 Client]
-    Client -->|2. Appel tool| Tool[🔧 Tool]
-    Tool -->|3. Résultat| Client
-    Client -->|4. Contexte| LLM[🤖 LLM]
-    LLM -->|5. Réponse| Client
-    Client -->|6. Autre tool| Tool
-
-    style User fill:#e1f5ff
-    style Client fill:#fff4e6
-    style Tool fill:#e8f5e9
-    style LLM fill:#f3e5f5
-```
-
-</div>
-
-</div>
-
----
-layout: default
-section: "02"
-sectionName: "Architecture"
 slideName: "Client / Host / Server"
 ---
 
@@ -296,7 +26,7 @@ slideName: "Client / Host / Server"
 
 </div>
 
-<div>
+<div v-click>
 
 ### 💻 Client
 
@@ -308,7 +38,7 @@ slideName: "Client / Host / Server"
 
 </div>
 
-<div>
+<div v-click>
 
 ### 🔧 Serveur
 
@@ -320,8 +50,32 @@ slideName: "Client / Host / Server"
 
 </div>
 
-<div class="mt-8 text-sm text-gray-500">
+<div v-click class="flex justify-center scale-200 mt-10">
 
-**Exemple** : VS Code (Host) → instancie un Client → se connecte au Serveur filesystem
+```mermaid
+graph LR
+    subgraph Host["🏠 MCP Host (VS Code)"]
+    %%{init:{'flowchart':{'subGraphTitleMargin': {"top": 0,"bottom": 20},'nodeSpacing': 10, 'rankSpacing': 50}}}%%
+        direction TB
+        Client1["💻 Client 1"]
+        Client2["💻 Client 2"]
+    end
+
+    subgraph Servers[" "]
+        direction TB
+        ServerA["🔧 Serveur A - Filesystem"]
+        ServerB["🔧 Serveur B - Database"]
+    end
+
+    Client1 <-->|"Connexion persistante"| ServerA
+    Client2 <-->|"Connexion persistante"| ServerB
+
+    style Host fill:#dbeafe,stroke:#3b82f6,stroke-width:3px
+    style Client1 fill:#d1fae5,stroke:#10b981,stroke-width:2px
+    style Client2 fill:#d1fae5,stroke:#10b981,stroke-width:2px
+    style Servers fill:none,stroke:none
+    style ServerA fill:#e9d5ff,stroke:#a855f7,stroke-width:2px,padding:8px 20px
+    style ServerB fill:#e9d5ff,stroke:#a855f7,stroke-width:2px,padding:8px 20px
+```
 
 </div>

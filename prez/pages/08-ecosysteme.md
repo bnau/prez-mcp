@@ -21,13 +21,6 @@ slideName: "MCP Registry"
 * **Awesome MCP** : liste communautaire antérieure au registry
 
 
----
-layout: default
-section: "08"
-sectionName: "Écosystème"
-slideName: "Serveurs recommandés"
----
-
 # Mes recommandations
 
 * Context7
@@ -83,3 +76,12 @@ slideName: "Sécurité"
 <!--
 https://semgrep.dev/blog/2025/a-security-engineers-guide-to-mcp/#concepts-(control-flow)
 -->
+
+---
+layout: image
+section: "08"
+sectionName: "Écosystème"
+slideName: "Comparatif"
+image: /images/mcp-claude-code.png
+backgroundSize: contain
+---
