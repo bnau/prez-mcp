@@ -6,6 +6,13 @@ subtitle: "Développement d'un serveur MCP"
 ---
 
 ---
+layout: iframe
+
+# the web page source
+url: https://developers.events/#/2026/calendar
+---
+
+---
 layout: default
 section: "05"
 sectionName: "Démo"

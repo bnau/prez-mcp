@@ -139,7 +139,7 @@ Important:
             "error": f"Analysis failed: {str(e)}",
             "applied_confs": [],
         }
-    #region
+    #endregion
 
 
 #region MCP templated resource

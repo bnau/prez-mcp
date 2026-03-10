@@ -32,7 +32,7 @@ sectionName: "Features client"
 slideName: "Sampling - Requête"
 ---
 
-# Sampling - Requête
+# Sampling
 
 Le serveur demande au client d'utiliser son LLM
 
@@ -40,10 +40,8 @@ Le serveur demande au client d'utiliser son LLM
 
 <div>
 
-```json {all|4-16}
+```json {none|all}
 {
-  "jsonrpc": "2.0",
-  "id": 1,
   "method": "sampling/createMessage",
   "params": {
     "messages": [
@@ -51,7 +49,7 @@ Le serveur demande au client d'utiliser son LLM
         "role": "user",
         "content": {
           "type": "text",
-          "text": "Summarize this data"
+          "text": "Quelle est la meilleure conf ?"
         }
       }
     ],
@@ -66,17 +64,15 @@ Le serveur demande au client d'utiliser son LLM
 
 <div>
 
-```json {all|5-16}
+```json {none|all}
 {
-  "jsonrpc": "2.0",
-  "id": 1,
   "result": {
     "role": "assistant",
     "content": {
       "type": "text",
-      "text": "Here's a summary..."
+      "text": "Devoxx France bien sûr !!!"
     },
-    "model": "claude-3-5-sonnet",
+    "model": "claude-3-sonnet",
     "stopReason": "endTurn"
   }
 }
@@ -96,7 +92,7 @@ sectionName: "Features client"
 slideName: "Elicitation - Requête"
 ---
 
-# Elicitation - Requête
+# Elicitation
 
 Le serveur demande des informations à l'utilisateur
 
@@ -104,21 +100,23 @@ Le serveur demande des informations à l'utilisateur
 
 <div>
 
-```json {all|4-14}
+```json {all|5-15}
 {
-  "jsonrpc": "2.0",
-  "id": 2,
-  "method": "elicitation/createMessage",
+  "method": "elicitation/create",
   "params": {
-    "messages": [
-      {
-        "role": "user",
-        "content": {
-          "type": "text",
-          "text": "Do you want to delete file.txt?"
+    "mode": "form",
+    "message": "Quel a été ton talk préféré ?",
+    "requestedSchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
         }
-      }
-    ]
+      },
+      "required": [
+        "name"
+      ]
+    }
   }
 }
 ```
@@ -129,15 +127,12 @@ Le serveur demande des informations à l'utilisateur
 
 <div>
 
-```json {all|5-11}
+```json {none|all}
 {
-  "jsonrpc": "2.0",
-  "id": 2,
   "result": {
-    "role": "user",
+    "action": "accept",
     "content": {
-      "type": "text",
-      "text": "Yes, proceed"
+      "name": "Je te dirai ça vendredi."
     }
   }
 }
@@ -158,7 +153,7 @@ sectionName: "Features client"
 slideName: "Roots - Liste"
 ---
 
-# Roots - Liste
+# Roots
 
 Le client déclare ses dossiers de travail
 
@@ -166,10 +161,8 @@ Le client déclare ses dossiers de travail
 
 <div>
 
-```json {all|4}
+```json
 {
-  "jsonrpc": "2.0",
-  "id": 3,
   "method": "roots/list"
 }
 ```
@@ -180,10 +173,8 @@ Le client déclare ses dossiers de travail
 
 <div>
 
-```json {all|5-13}
+```json {none|all}
 {
-  "jsonrpc": "2.0",
-  "id": 3,
   "result": {
     "roots": [
       {

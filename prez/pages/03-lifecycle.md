@@ -5,7 +5,6 @@ title: Lifecycle, Transports, API
 ---
 
 
-
 ---
 layout: default
 section: "03"
@@ -70,13 +69,15 @@ slideName: "Les transports"
 
 Trois modes de communication possibles entre client et serveur
 
-| Transport | Usage                        |
-| --------- |------------------------------|
-| **stdio** | Processus locaux             |
-| **Streamable HTTP** | Serveurs distants            |
-| **SSE** | _Déprecié_ |
+<v-clicks>
 
+| Transport           | Usage             |
+|---------------------|-------------------|
+| **stdio**           | Processus locaux  |
+| **Streamable HTTP** | Serveurs distants |
+| **SSE**             | _Déprecié_        |
 
+</v-clicks>
 
 ---
 layout: default
@@ -91,11 +92,21 @@ MCP est un **protocole stateful**
 
 Les trois types d'échanges entre client et serveur sont :
 
-1. **Initialisation** - _Client → Serveur_ - Handshake et négociation des fonctionnalités supportées
-2. **Utilisation** - _Client ↔ Serveur_ - Découverte et manipulation de primitives (tools, elicitation, sampling...)
-3. **Notification** - _Serveur → Client_ - Mise à jour dynamique des primitives disponibles
+<v-click>
 
-_Une **primitive** est une fonctionnalité supportée par MCP exposée par le client ou le serveur_
+- **Initialisation** - _Client → Serveur_ - Handshake et négociation des fonctionnalités supportées
+</v-click>
+
+<v-click>
+
+- **Utilisation** - _Client ↔ Serveur_ - Découverte et manipulation de primitives (tools, elicitation, sampling...)
+> _Une **primitive** est une fonctionnalité supportée par MCP exposée par le client ou le serveur_
+</v-click>
+<v-click>
+
+- **Notification** - _Serveur → Client_ - Mise à jour dynamique des primitives disponibles
+</v-click>
+
 
 ---
 layout: default
@@ -191,7 +202,7 @@ Appels de tools/resources/prompts
 
 <div>
 
-```json {all|6-12}
+```json {all|6-14}
 {
   "jsonrpc": "2.0",
   "id": 2,
@@ -201,7 +212,9 @@ Appels de tools/resources/prompts
         "name": "example_tool",
         "description": "This is an example tool",
         "inputSchema": {
-          ... JSON Schema...
+          ...
+          JSON
+          Schema...
         }
       }
     ]
