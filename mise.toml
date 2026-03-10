@@ -25,3 +25,7 @@ run = "uv run mcp_server/server_demo2.py"
 
 [tasks.run_client]
 run = "uv run mcp_client/client.py"
+
+[tasks.slides]
+run = "bun run dev"
+dir = "prez"

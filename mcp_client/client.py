@@ -17,6 +17,9 @@ async def sampling_handler(
     #region Affichage du prompt envoyé par le serveur
     content_text = messages[0].content.text
 
+    print()
+    print()
+    print("📢 New sampling request from server")
     print("🤖 Server requests an LLM call:")
     print("-" * 80)
     if len(content_text) > 400:
@@ -60,6 +63,9 @@ async def sampling_handler(
 
 #region Elicitation Handler
 async def elicitation_handler(prompt: str, response_type: type | None, params, context):
+    print()
+    print()
+    print("📢 New elicitation request from server")
     print(prompt)
     answer = input("Answer (y/n or 'cancel' to abort): ").strip().lower()
 
@@ -86,21 +92,59 @@ async def main():
     )
 
     async with mcp_client:
-        #region Candidature aux conférences
-        result = await mcp_client.call_tool(
-            "apply_conferences",
-            {"country": "France", "talk_resource_uri": "talk://mcp", "min_date": "2026-05-01", "max_date": "2026-05-31"},
-        )
+        #region Récupération des outils MCP disponibles
+        tools_list = await mcp_client.list_tools()
+
+        openai_tools = [{
+            "type": "function",
+            "function": {
+                "name": tool.name,
+                "description": tool.description,
+                "parameters": tool.inputSchema,
+            }
+        } for tool in tools_list]
+        #endregion
+
+        #region Appel au LLM avec tool calling
+        async with httpx.AsyncClient(timeout=60.0) as client:
+            response = await client.post(
+                "http://localhost:4141/v1/chat/completions",
+                json={
+                    "model": "gpt-4o-mini",
+                    "messages": [{"role": "user",
+                                  "content": "Je voudrais candidater aux conférences en France en mai 2026 pour parler de MCP"}],
+                    "tools": openai_tools,
+                    "tool_choice": "auto",
+                },
+            )
+
+            result = response.json()
+            message = result["choices"][0]["message"]
+
+            print(f"🤖 LLM: {message.get('content', '(calling tool)')}")
+        #endregion
+
+        #region Exécution de l'appel d'outil si demandé
+        result = None
+        if message.get("tool_calls"):
+            tool_call = message["tool_calls"][0]
+            function_name = tool_call["function"]["name"]
+            function_args = json.loads(tool_call["function"]["arguments"])
+
+            print(f"\n🔧 Tool call: {function_name}")
+            print(f"📋 Arguments: {json.dumps(function_args, indent=2)}")
+
+            result = await mcp_client.call_tool(function_name, function_args)
         #endregion
 
         #region Affichage des résultats
-        print("\nResult:")
+        print("\n✅ Result:")
         for content in result.content:
             if hasattr(content, "text"):
                 data = json.loads(content.text)
                 print("You applied to:")
-                for conf in data['applied_confs']:  # Display all conferences
-                    print(conf)
+                for conf in data['applied_confs']:
+                    print(f"  - {conf}")
         #endregion
 
 
