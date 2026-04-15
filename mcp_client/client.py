@@ -46,7 +46,7 @@ async def sampling_handler(
             response = await client.post(
                 "http://localhost:4141/v1/chat/completions",
                 json={
-                    "model": "gpt-4o-mini",
+                    "model": "gpt-4o",
                     "messages": [{"role": message.role, "content": message.content.text} for message in messages],
                     "temperature": params.temperature,
                     "max_tokens": params.maxTokens,
@@ -110,9 +110,9 @@ async def main():
             response = await client.post(
                 "http://localhost:4141/v1/chat/completions",
                 json={
-                    "model": "gpt-4o-mini",
+                    "model": "gpt-4o",
                     "messages": [{"role": "user",
-                                  "content": "Je voudrais candidater aux conférences en France en mai 2026 pour parler de MCP"}],
+                                  "content": "Je voudrais candidater aux conférences en France en octobre 2026 pour parler de MCP"}],
                     "tools": openai_tools,
                     "tool_choice": "auto",
                 },

@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import SlideHeader from '../components/SlideHeader.vue'
 import ContactLink from '../components/ContactLink.vue'
+import Footer from '../components/Footer.vue'
 
 const props = defineProps<{
   section?: string
   sectionName?: string
   slideName?: string
   name: string
-  jobTitle: string
+  jobTitles: string[]
   photo: string
   email: string
   linkedin: string
@@ -47,7 +48,9 @@ const websiteIcon = '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2
             <img :src="photo" class="w-40 h-40 rounded-full mb-4" :alt="name" />
             <div class="text-center">
               <p class="text-2xl font-bold">{{ name }}</p>
-              <p class="text-lg text-gray-600">{{ jobTitle }}</p>
+              <div v-for="(title, index) in jobTitles" :key="index" class="text-lg text-gray-600">
+                {{ title }}
+              </div>
             </div>
           </div>
 
@@ -88,5 +91,8 @@ const websiteIcon = '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2
         </div>
       </div>
     </div>
+
+    <!-- Footer -->
+    <Footer />
   </div>
 </template>

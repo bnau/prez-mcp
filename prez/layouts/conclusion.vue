@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ContactLink from '../components/ContactLink.vue'
+import Footer from '../components/Footer.vue'
 
 const props = defineProps<{
   name: string
@@ -51,7 +52,7 @@ const websiteIcon = '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2
             <p class="text-sm text-gray-600">{{ jobTitle }}</p>
           </div>
 
-          <div class="text-xs space-y-1.5 w-full p-4">
+          <div class="text-xs space-y-1.5 w-full px-4 pl-20">
             <ContactLink
               :href="`mailto:${email}`"
               :icon="emailIcon"
@@ -98,5 +99,8 @@ const websiteIcon = '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2
         </div>
       </div>
     </div>
+
+    <!-- Footer -->
+    <Footer />
   </div>
 </template>

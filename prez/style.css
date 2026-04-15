@@ -1,0 +1,23 @@
+/* Ajustement de l'espacement des citations/notes markdown */
+blockquote {
+  margin-top: 0rem !important;  /* Réduit l'espace au-dessus de la note */
+  margin-bottom: 1rem !important; /* Augmente l'espace en-dessous de la note */
+}
+
+ul:has(+ blockquote) {
+  margin-bottom: 0rem !important; /* Réduit l'espace entre la liste et la note */
+}
+
+.slidev-code-wrapper {
+  margin: 0 !important;
+}
+
+.slidev-code-wrapper + p {
+  margin-top: 0.2rem !important;
+}
+
+video {
+  display: flex;
+  justify-self: center;
+  height: 450px;
+}

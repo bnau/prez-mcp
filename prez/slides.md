@@ -8,7 +8,10 @@ event: Devoxx France
 date: 22/04/2026
 subtitle: Une application pour tout comprendre
 favicon: /images/profile.jpg
+css: unocss
 ---
+
+<style src="./style.css"></style>
 
 # MCP en pratique
 

@@ -1,3 +1,6 @@
+<script setup>
+import Footer from '../components/Footer.vue'
+</script>
 <template>
   <!-- Proposition 1: Design minimaliste avec ligne de séparation -->
   <div class="slidev-layout h-full flex flex-col justify-center items-center text-center px-20">
@@ -24,5 +27,8 @@
         {{ $frontmatter.author || 'Bertrand Nau' }} • {{ $frontmatter.event || 'Devoxx France' }} • {{ $frontmatter.date || '22/04/2026' }}
       </div>
     </div>
+
+    <!-- Footer -->
+    <Footer />
   </div>
 </template>

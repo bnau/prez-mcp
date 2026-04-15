@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SlideHeader from '../components/SlideHeader.vue'
+import Footer from '../components/Footer.vue'
 
 const props = defineProps<{
   section?: string
@@ -29,5 +30,8 @@ const props = defineProps<{
         <slot name="right" />
       </div>
     </div>
+
+    <!-- Footer -->
+    <Footer />
   </div>
 </template>

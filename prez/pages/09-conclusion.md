@@ -1,7 +1,6 @@
 ---
 layout: conclusion
 name: "Bertrand Nau"
-jobTitle: "Développeur"
 photo: "/images/profile.jpg"
 email: "contact@bertrand-nau.fr"
 linkedin: "bertrand-nau"

@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import SlideHeader from '../components/SlideHeader.vue'
+import Footer from '../components/Footer.vue'
 
 // Dans Slidev, les propriétés du frontmatter sont disponibles directement comme props
 const props = defineProps<{
   section?: string
   sectionName?: string
   slideName?: string
+  hideFooter?: boolean
 }>()
 </script>
 
@@ -20,5 +22,8 @@ const props = defineProps<{
 
     <!-- Content -->
     <slot />
+
+    <!-- Footer -->
+    <Footer v-if="!hideFooter" />
   </div>
 </template>

@@ -1,4 +1,5 @@
 <script setup>
+import Footer from '../components/Footer.vue'
 </script>
 <template>
   <!-- Proposition 1: Numéro grand et stylé à gauche -->
@@ -18,5 +19,8 @@
         <div class="w-32 h-1.5 bg-current opacity-30 mt-8"></div>
       </div>
     </div>
+
+    <!-- Footer -->
+    <Footer />
   </div>
 </template>

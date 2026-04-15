@@ -202,7 +202,7 @@ Appels de tools/resources/prompts
 
 <div>
 
-```json {all|6-14}
+```json {all|6-10}
 {
   "jsonrpc": "2.0",
   "id": 2,
@@ -211,11 +211,7 @@ Appels de tools/resources/prompts
       {
         "name": "example_tool",
         "description": "This is an example tool",
-        "inputSchema": {
-          ...
-          JSON
-          Schema...
-        }
+        "inputSchema": {...JSON Schema...}
       }
     ]
   }
