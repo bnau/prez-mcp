@@ -39,7 +39,7 @@ slideName: "Roadmap"
 
 # Good to know
 
-* Quelques fonctionnalités supplementaires: Completion, Logging, Pagination
+* Quelques fonctionnalités supplémentaires: Completion, Logging, Pagination
 * Possibilité d'ajouter des extensions
   * MCP Apps
   * Extensions d'Authorisation

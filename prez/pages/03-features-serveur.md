@@ -21,6 +21,6 @@ _Une **primitive** est une fonctionnalité supportée par MCP exposée par le cl
 |--------------|------------------------------------------------------------|---------------------------------------------------|
 | **Tool**     | Fonction que le LLM peut décider d'appeler                 | Rechercher dans une base de données               |
 | **Resource** | Source de données en lecture seule | Fichiers, schémas DB, documentation...            |
-| **Prompt**   | Message prédéfini à envoyer au LLM                      | Liste d'opération à exécuter dans un ordre précis |
+| **Prompt**   | Message prédéfini à envoyer au LLM                      | Liste d'opérations à exécuter dans un ordre précis |
 
 </v-clicks>
