@@ -1,13 +1,13 @@
 ---
 layout: section
-number: "03"
+number: "04"
 title: Lifecycle, Transports, API
 ---
 
 
 ---
 layout: default
-section: "03"
+section: "04"
 sectionName: "Lifecycle"
 slideName: "JSON-RPC"
 ---
@@ -60,7 +60,7 @@ Basé sur **JSON-RPC 2.0**
 
 ---
 layout: default
-section: "03"
+section: "04"
 sectionName: "Lifecycle"
 slideName: "Les transports"
 ---
@@ -69,15 +69,11 @@ slideName: "Les transports"
 
 Trois modes de communication possibles entre client et serveur
 
-<v-clicks>
-
 | Transport           | Usage             |
 |---------------------|-------------------|
 | **stdio**           | Processus locaux  |
-| **Streamable HTTP** | Serveurs distants |
+| **Streamable HTTP** _HTTP + SSE + Headers spécifiques_ | Serveurs distants |
 | **SSE**             | _Déprecié_        |
-
-</v-clicks>
 
 ---
 layout: default
@@ -90,17 +86,16 @@ slideName: "Cycle de vie"
 
 MCP est un **protocole stateful**
 
-Les trois types d'échanges entre client et serveur sont :
-
 <v-click>
+
+Les trois types d'échanges entre client et serveur sont :
 
 - **Initialisation** - _Client → Serveur_ - Handshake et négociation des fonctionnalités supportées
 </v-click>
 
 <v-click>
 
-- **Utilisation** - _Client ↔ Serveur_ - Découverte et manipulation de primitives (tools, elicitation, sampling...)
-> _Une **primitive** est une fonctionnalité supportée par MCP exposée par le client ou le serveur_
+- **Utilisation** - _Client ↔ Serveur_ - Découverte et manipulation de primitives
 </v-click>
 <v-click>
 

@@ -8,33 +8,38 @@ title: Introduction
 layout: default
 section: "01"
 sectionName: "Introduction"
-slideName: "Définition"
+slideName: "Interface ChatGPT"
 ---
 
-# Protocole universel
-<Quote author="Anthropic">
-MCP (Model Context Protocol) is an open-source standard for connecting AI applications to external systems
-</Quote>
-
-<img src="/images/mcp-simple-diagram.png" class="h-50 mx-auto" alt="Diagramme MCP" />
+<div class="h-full flex items-center justify-center">
+  <img src="/images/chatgpt-interface.png" class="max-h-full max-w-full object-contain" alt="Interface ChatGPT" />
+</div>
 
 
 ---
 layout: default
 section: "01"
 sectionName: "Introduction"
-slideName: "Chronologie"
+slideName: "Définition"
 ---
 
-# Chronologie
+# Protocole universel
+<Quote author="Anthropic 2024">
+MCP is a new standard for connecting AI assistants to the systems where data lives.
+</Quote>
+<Quote author="Anthropic 2025" v-click>
+MCP is an open-source standard for connecting AI applications to external systems.
+</Quote>
 
-- Novembre 2024 : Annonce par Anthropic
+---
+layout: default
+section: "01"
+sectionName: "Introduction"
+slideName: "Définition"
+---
 
-- Mars 2025 : Authentification OAuth
+# Protocole universel
 
-- Septembre 2025 : Preview du Registry
+<img src="/images/mcp-simple-diagram.png" class="h-75 mx-auto m-10" alt="Diagramme MCP" />
 
-- Nov. 2025 : Un an après, standard adopté par la communauté
-
-- Aujourd'hui : Des features majeures dans la roadmap
 

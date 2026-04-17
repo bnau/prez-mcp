@@ -1,116 +1,93 @@
 ---
 layout: section
 number: "08"
-title: Écosystème MCP
+title: Good to know
 ---
 
 
 ---
 layout: default
 section: "08"
-sectionName: "Écosystème"
+sectionName: "Good to know"
 slideName: "MCP Registry"
 ---
 
-# Découvrir des serveurs
+# Écosystème
 
 * **MCP Registry** : registre officiel de serveurs
-  * Support de paquets PyPI, npm, Docker/OCI, NuGet et MCPB
-  * Installation de paquets par la host
-  * ⚠️ Modération légère - vérifier la source avant installation
-
-<v-click>
+  * Support de paquets PyPI, npm, Docker/OCI...
+  * https://registry.modelcontextprotocol.io/
+  * ⚠️ Géré par la communauté - vérifier la pertinence avant installation
 
 * **Awesome MCP** : liste communautaire antérieure au registry
-</v-click>
 
 <v-click>
 
-# Mes recommandations
+# Quelques serveurs intéressants
 
 * Context7
 * Playwright
-* TaskMaster
 * Brave Search
 </v-click>
 
 ---
 layout: default
 section: "08"
-sectionName: "Écosystème"
+sectionName: "Good to know"
 slideName: "Roadmap"
 ---
 
 # Good to know
 
-* Quelques fonctionnalités serveur
-  * Completion
-  * Logging
-  * Pagination
-
-<v-click>
-
-* Possibilité d'étendre le protocole
-</v-click>
-
+* Quelques fonctionnalités supplementaires: Completion, Logging, Pagination
+* Possibilité d'ajouter des extensions
+  * MCP Apps
+  * Extensions d'Authorisation
 <v-click>
 
 # À venir
-</v-click>
-
-<v-click>
 
 * **Tasks** : exécution asynchrone
-</v-click>
-<v-click>
 
 * Protocole stateless
-</v-click>
-<v-click>
 
-* URLs .well-known pour découvrir les possibilités d'un serveur
+* URLs .well-known
 </v-click>
 
 ---
-layout: default
+layout: two-cols
 section: "08"
-sectionName: "Écosystème"
-slideName: "Sécurité"
+sectionName: "Good to know"
+slideName: "Bonnes pratiques et sécurité"
 ---
 
-## Authentification et configurations réseau
+## Bonnes pratiques
 
-* Implémenter l'authentification OAuth2
-* Utiliser les pratiques de sécurité standard pour les API (HTTPS, validation de jetons, etc.)
-* Utiliser des SDKs officiels ou reconnus
+* Descriptions des tools claires et précises
+* Limiter le nombre de tools exposés
+* Un tool par intention, pas par endpoint REST
+* ⚠️ Les données sensibles ne doivent pas être exposées
+
+::right::
 
 <v-click>
 
-## Failles de sécurité spécifiques
+## Failles de sécurité
 
 * Tool poisoning
 >  _Injection d'un prompt malveillant dans la description d'un tool_
 
-</v-click>
-<v-click>
-
 * Rug pulling
 >  _Le serveur modifie la description d'un tool après validation du client_
-</v-click>
-<v-click>
 
 * Tool shadowing
 >  _Le serveur propose un tool avec une description similaire à un tool légitime_
 </v-click>
 
-<!--
-https://semgrep.dev/blog/2025/a-security-engineers-guide-to-mcp/#concepts-(control-flow)
--->
-
 ---
 layout: image
 section: "08"
-sectionName: "Écosystème"
+sectionName: "Good to know"
 slideName: "Comparatif"
 image: /images/mcp-claude-code.png
 backgroundSize: contain

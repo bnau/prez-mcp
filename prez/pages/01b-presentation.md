@@ -6,7 +6,7 @@ slideName: "Présentation"
 name: "Bertrand Nau"
 jobTitles: 
   - "Full Stack Dev & DevOps Engineer"
-  - "Fervent d'IA"
+  - "Adepte d'IA"
   - "Kubestronaut"
 photo: "/images/profile.jpg"
 email: "contact@bertrand-nau.fr"

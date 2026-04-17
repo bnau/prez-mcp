@@ -28,11 +28,11 @@ src: ./pages/02-architecture.md
 ---
 
 ---
-src: ./pages/03-lifecycle.md
+src: ./pages/03-features-serveur.md
 ---
 
 ---
-src: ./pages/04-features-serveur.md
+src: ./pages/04-lifecycle.md
 ---
 
 ---

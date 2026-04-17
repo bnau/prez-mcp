@@ -11,10 +11,11 @@ layout: iframe
 # the web page source
 url: https://developers.events/#/2026/list?country=France
 ---
-layout: default
-section: "05"
-sectionName: "Démo"
-slideName: "Fausse idée"
+---
+layout: section
+number: "05"
+title: Un peu de code?
+---
 ---
 layout: default
 section: "05"

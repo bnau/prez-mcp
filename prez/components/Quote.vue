@@ -34,7 +34,6 @@ defineProps({
   font-size: 1.5rem;
   line-height: 1.8;
   color: #333;
-  margin-bottom: 2rem;
 }
 
 .quote-text::before {
