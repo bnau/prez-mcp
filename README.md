@@ -1,6 +1,10 @@
 # MCP en pratique : une application pour tout comprendre
 
-> **Note** : Ce code n'est pas complètement académique. Il est pensé pour être le plus simple possible, compréhensible pendant la démo et éviter les effets démo. 🎯
+## Merci !!
+
+Au projet [Developers Events](https://developers.events/) sur lequel la démo repose et à [Aurélie](https://github.com/scraly) pour tout le travail qu'elle y fait.
+
+> **Note** : Ce code est volontairement pensé pour être le plus simple possible, compréhensible rapidement et éviter les effets démo. Certaines parties non présentées pendant la présentation ont été écrites le plus vite possible pour que je puisse me concentrer sur le code qui sera montré.
 
 ---
 

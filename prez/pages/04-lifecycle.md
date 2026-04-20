@@ -56,6 +56,27 @@ Basé sur **JSON-RPC 2.0**
 
 </div>
 
+---
+layout: default
+section: "04"
+sectionName: "Lifecycle"
+slideName: "Cycle de vie"
+---
+
+# Cycle de vie MCP
+
+MCP est un **protocole bidirectionnel**
+
+<v-click>
+
+Les trois principaux types d'échanges entre client et serveur sont :
+
+- **Initialisation** - _Client → Serveur_ - Handshake et négociation des fonctionnalités supportées
+
+- **Utilisation** - _Client ↔ Serveur_ - Découverte et manipulation de primitives
+
+- **Notification** - _Serveur → Client_ - Mise à jour dynamique des primitives disponibles
+</v-click>
 
 
 ---
@@ -69,43 +90,19 @@ slideName: "Les transports"
 
 Trois modes de communication possibles entre client et serveur
 
+<v-clicks>
+
 | Transport           | Usage             |
 |---------------------|-------------------|
 | **stdio**           | Processus locaux  |
 | **Streamable HTTP** _HTTP + SSE + Headers spécifiques_ | Serveurs distants |
 | **SSE**             | _Déprecié_        |
 
----
-layout: default
-section: "03"
-sectionName: "Lifecycle"
-slideName: "Cycle de vie"
----
-
-# Cycle de vie MCP
-
-MCP est un **protocole stateful**
-
-<v-click>
-
-Les trois types d'échanges entre client et serveur sont :
-
-- **Initialisation** - _Client → Serveur_ - Handshake et négociation des fonctionnalités supportées
-</v-click>
-
-<v-click>
-
-- **Utilisation** - _Client ↔ Serveur_ - Découverte et manipulation de primitives
-</v-click>
-<v-click>
-
-- **Notification** - _Serveur → Client_ - Mise à jour dynamique des primitives disponibles
-</v-click>
-
+</v-clicks>
 
 ---
 layout: default
-section: "03"
+section: "04"
 sectionName: "Lifecycle"
 slideName: "Initialisation"
 ---
@@ -170,7 +167,7 @@ Handshake avec négociation des capabilities
 
 ---
 layout: default
-section: "03"
+section: "04"
 sectionName: "Lifecycle"
 slideName: "Utilisation"
 ---
@@ -221,7 +218,7 @@ Appels de tools/resources/prompts
 
 ---
 layout: default
-section: "03"
+section: "04"
 sectionName: "Lifecycle"
 slideName: "Refresh"
 ---

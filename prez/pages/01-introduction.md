@@ -1,10 +1,4 @@
 ---
-layout: section
-number: "01"
-title: Introduction
----
-
----
 layout: default
 section: "01"
 sectionName: "Introduction"

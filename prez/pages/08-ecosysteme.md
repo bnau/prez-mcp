@@ -84,6 +84,8 @@ slideName: "Bonnes pratiques et sécurité"
 >  _Le serveur propose un tool avec une description similaire à un tool légitime_
 </v-click>
 
+## Solutions
+
 ---
 layout: image
 section: "08"

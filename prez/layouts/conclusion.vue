@@ -4,7 +4,7 @@ import Footer from '../components/Footer.vue'
 
 const props = defineProps<{
   name: string
-  jobTitle: string
+  jobTitles: string[]
   photo: string
   email: string
   linkedin: string
@@ -49,7 +49,9 @@ const websiteIcon = '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2
 
           <div class="text-center mb-4">
             <p class="text-lg font-bold">{{ name }}</p>
-            <p class="text-sm text-gray-600">{{ jobTitle }}</p>
+            <div v-for="(title, index) in jobTitles" :key="index" class="text-sm text-gray-600">
+              {{ title }}
+            </div>
           </div>
 
           <div class="text-xs space-y-1.5 w-full px-4 pl-20">
@@ -57,6 +59,12 @@ const websiteIcon = '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2
               :href="`mailto:${email}`"
               :icon="emailIcon"
               :label="email"
+            />
+
+            <ContactLink
+              :href="`https://${website}`"
+              :icon="websiteIcon"
+              :label="website"
             />
 
             <ContactLink
@@ -75,12 +83,6 @@ const websiteIcon = '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2
               :href="`https://bsky.app/profile/${bluesky}`"
               :icon="blueskyIcon"
               :label="`@${bluesky}`"
-            />
-
-            <ContactLink
-              :href="`https://${website}`"
-              :icon="websiteIcon"
-              :label="website"
             />
           </div>
         </div>

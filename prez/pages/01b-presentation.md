@@ -4,9 +4,9 @@ section: "01"
 sectionName: "Introduction"
 slideName: "Présentation"
 name: "Bertrand Nau"
-jobTitles: 
+jobTitles:
   - "Full Stack Dev & DevOps Engineer"
-  - "Adepte d'IA"
+  - "Formateur & Développeur aguerri en IA"
   - "Kubestronaut"
 photo: "/images/profile.jpg"
 email: "contact@bertrand-nau.fr"

@@ -64,6 +64,12 @@ const websiteIcon = '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2
               />
 
               <ContactLink
+                :href="`https://${website}`"
+                :icon="websiteIcon"
+                :label="website"
+              />
+
+              <ContactLink
                 :href="`https://www.linkedin.com/in/${linkedin}`"
                 :icon="linkedinIcon"
                 :label="linkedin"
@@ -79,12 +85,6 @@ const websiteIcon = '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2
                 :href="`https://bsky.app/profile/${bluesky}`"
                 :icon="blueskyIcon"
                 :label="`@${bluesky}`"
-              />
-
-              <ContactLink
-                :href="`https://${website}`"
-                :icon="websiteIcon"
-                :label="website"
               />
             </div>
           </div>

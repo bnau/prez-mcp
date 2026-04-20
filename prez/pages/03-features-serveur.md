@@ -1,14 +1,14 @@
 ---
 layout: section
 number: "03"
-title: Features serveur
+title: Fonctionnalités serveur
 ---
 
 
 ---
 layout: default
 section: "03"
-sectionName: "Features serveur"
+sectionName: "Fonctionnalités serveur"
 slideName: "Primitives serveur"
 ---
 
@@ -17,10 +17,10 @@ _Une **primitive** est une fonctionnalité supportée par MCP exposée par le cl
 
 <v-clicks>
 
-| Primitive    | Usage                                                      | Exemples                                          |
-|--------------|------------------------------------------------------------|---------------------------------------------------|
-| **Tool**     | Fonction que le LLM peut décider d'appeler                 | Rechercher dans une base de données               |
-| **Resource** | Source de données en lecture seule | Fichiers, schémas DB, documentation...            |
-| **Prompt**   | Message prédéfini à envoyer au LLM                      | Liste d'opérations à exécuter dans un ordre précis |
+| Primitive    | Définition                                                 |
+|--------------|------------------------------------------------------------|
+| **Tool**     | Fonction à déclencher ou source de données à interroger    |
+| **Resource** | Source de données en lecture seule                         |
+| **Prompt**   | Message prédéfini à envoyer au LLM                         |
 
 </v-clicks>

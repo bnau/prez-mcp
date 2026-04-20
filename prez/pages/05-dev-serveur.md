@@ -13,7 +13,6 @@ url: https://developers.events/#/2026/list?country=France
 ---
 ---
 layout: section
-number: "05"
 title: Un peu de code?
 ---
 ---
@@ -24,7 +23,7 @@ slideName: "MCP Inspector"
 hideFooter: true
 ---
 <SlidevVideo controls>
-  <source src="/public/videos/inspector.webm" type="video/webm">
+  <source src="/public/videos/inspector.mp4" type="video/mp4">
 </SlidevVideo>
 ---
 layout: default
@@ -36,104 +35,14 @@ hideFooter: true
 <SlidevVideo controls>
   <source src="/public/videos/vscode.webm" type="video/webm">
 </SlidevVideo>
----
-layout: default
-section: "05"
-sectionName: "Démo"
-slideName: "Fausse idée"
----
-
-# Fausse idée
-
-<div style="position: relative; height: 400px; display: flex; align-items: center; justify-content: center;">
-
-<div v-click.hide style="position: absolute; width: 100%; text-align: center;">
-
-```mermaid
-%%{init: {'themeVariables': { 'edgeLabelBackground': 'white'}}}%%
-graph LR
-    User[👤 User] -->|1. Prompt| Client[💻 Host / Client]
-    Client -->|2. Transmet| LLM[🤖 LLM]
-    LLM -->|3. Déclenche| Tools[🔧 Serveur / Tools]
-
-    style User fill:#e1f5ff
-    style Client fill:#fff4e6
-    style LLM fill:#f3e5f5
-    style Tools fill:#e8f5e9
-
-    linkStyle 0 stroke:white,color:white
-    linkStyle 1 stroke:white,color:white
-    linkStyle 2 stroke:white,color:white
-```
-
-</div>
-
-<div v-click="[1,2]" style="position: absolute; width: 100%; text-align: center;">
-
-```mermaid
-%%{init: {'themeVariables': { 'edgeLabelBackground': 'white'}}}%%
-graph LR
-    User[👤 User] -->|1. Prompt| Client[💻 Host / Client]
-    Client -->|2. Transmet| LLM[🤖 LLM]
-    LLM -->|3. Déclenche| Tools[🔧 Serveur / Tools]
-
-    style User fill:#e1f5ff
-    style Client fill:#fff4e6
-    style LLM fill:#f3e5f5
-    style Tools fill:#e8f5e9
-
-    linkStyle 1 stroke:white,color:white
-    linkStyle 2 stroke:white,color:white
-```
-
-</div>
-
-<div v-click="[2,3]" style="position: absolute; width: 100%; text-align: center;">
-
-```mermaid
-%%{init: {'themeVariables': { 'edgeLabelBackground': 'white'}}}%%
-graph LR
-    User[👤 User] -->|1. Prompt| Client[💻 Host / Client]
-    Client -->|2. Transmet| LLM[🤖 LLM]
-    LLM -->|3. Déclenche| Tools[🔧 Serveur / Tools]
-
-    style User fill:#e1f5ff
-    style Client fill:#fff4e6
-    style LLM fill:#f3e5f5
-    style Tools fill:#e8f5e9
-
-    linkStyle 2 stroke:white,color:white
-```
-
-</div>
-
-<div v-click=3 style="position: absolute; width: 100%; text-align: center;">
-
-```mermaid
-%%{init: {'themeVariables': { 'edgeLabelBackground': 'white'}}}%%
-graph LR
-    User[👤 User] -->|1. Prompt| Client[💻 Host / Client]
-    Client -->|2. Transmet| LLM[🤖 LLM]
-    LLM -->|3. Déclenche| Tools[🔧 Serveur / Tools]
-
-    style User fill:#e1f5ff
-    style Client fill:#fff4e6
-    style LLM fill:#f3e5f5
-    style Tools fill:#e8f5e9
-```
-
-</div>
-
-</div>
 
 ---
 layout: default
 section: "05"
 sectionName: "Démo"
-slideName: "La réalité"
+slideName: "Tool - Flux"
 ---
-
-# La réalité
+# Tool - Flux d'exécution
 
 <div style="position: relative; height: 400px; display: flex; align-items: center; justify-content: center;">
 

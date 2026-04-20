@@ -1,6 +1,10 @@
 ---
 layout: conclusion
 name: "Bertrand Nau"
+jobTitles:
+  - "Full Stack Dev & DevOps Engineer"
+  - "Formateur & Développeur aguerri en IA"
+  - "Kubestronaut"
 photo: "/images/profile.jpg"
 email: "contact@bertrand-nau.fr"
 linkedin: "bertrand-nau"

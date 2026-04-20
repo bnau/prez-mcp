@@ -1,7 +1,7 @@
 ---
 layout: section
 number: "06"
-title: Features client
+title: Fonctionnalités client
 ---
 
 
@@ -10,7 +10,7 @@ layout: section-with-header
 title: Sampling
 subtitle: Le serveur demande au client d'utiliser son API d'inférence
 section: "06"
-sectionName: "Features client"
+sectionName: "Fonctionnalités client"
 slideName: "Sampling"
 ---
 
@@ -18,7 +18,7 @@ slideName: "Sampling"
 ---
 layout: default
 section: "06"
-sectionName: "Features client"
+sectionName: "Fonctionnalités client"
 slideName: "Sampling - Flux"
 ---
 
@@ -282,71 +282,11 @@ graph LR
 
 
 ---
-layout: default
-section: "06"
-sectionName: "Features client"
-slideName: "Sampling - Requête"
----
-
-# Sampling - Détails des payloads
-
-Le serveur demande au client d'utiliser son LLM
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-```json {none|all}
-{
-  "method": "sampling/createMessage",
-  "params": {
-    "messages": [
-      {
-        "role": "user",
-        "content": {
-          "type": "text",
-          "text": "Quelle est la meilleure conf ?"
-        }
-      }
-    ],
-    "maxTokens": 100
-  }
-}
-```
-
-<p class="text-sm italic">Requête (serveur → client)</p>
-
-</div>
-
-<div>
-
-```json {none|all}
-{
-  "result": {
-    "role": "assistant",
-    "content": {
-      "type": "text",
-      "text": "Devoxx France bien sûr !!!"
-    },
-    "model": "claude-3-sonnet",
-    "stopReason": "endTurn"
-  }
-}
-```
-
-<p class="text-sm italic">Réponse (client → serveur)</p>
-
-</div>
-
-</div>
-
-
----
 layout: section-with-header
 title: Elicitation
 subtitle: Le serveur demande au client des informations à l'utilisateur
 section: "06"
-sectionName: "Features client"
+sectionName: "Fonctionnalités client"
 slideName: "Elicitation"
 ---
 
@@ -354,7 +294,7 @@ slideName: "Elicitation"
 ---
 layout: default
 section: "06"
-sectionName: "Features client"
+sectionName: "Fonctionnalités client"
 slideName: "Elicitation - Flux"
 ---
 
@@ -511,72 +451,11 @@ graph LR
 
 
 ---
-layout: default
-section: "06"
-sectionName: "Features client"
-slideName: "Elicitation - Requête"
----
-
-# Elicitation - Détails des payloads
-
-Le serveur demande des informations à l'utilisateur
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-```json {all|5-15}
-{
-  "method": "elicitation/create",
-  "params": {
-    "mode": "form",
-    "message": "Quel a été ton talk préféré ?",
-    "requestedSchema": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "name"
-      ]
-    }
-  }
-}
-```
-
-<p class="text-sm italic">Requête (serveur → client)</p>
-
-</div>
-
-<div>
-
-```json {none|all}
-{
-  "result": {
-    "action": "accept",
-    "content": {
-      "name": "Je te dirai ça vendredi."
-    }
-  }
-}
-```
-
-<p class="text-sm italic">Réponse (client → serveur)</p>
-
-</div>
-
-</div>
-
-
-
----
 layout: section-with-header
 title: Roots
 subtitle: Le client indique un dossier de travail au serveur
 section: "06"
-sectionName: "Features client"
+sectionName: "Fonctionnalités client"
 slideName: "Roots"
 ---
 
@@ -584,7 +463,7 @@ slideName: "Roots"
 ---
 layout: default
 section: "06"
-sectionName: "Features client"
+sectionName: "Fonctionnalités client"
 slideName: "Roots - Flux"
 ---
 
@@ -659,51 +538,3 @@ graph LR
 </div>
 
 </div>
-
-
----
-layout: default
-section: "06"
-sectionName: "Features client"
-slideName: "Roots - Liste"
----
-
-# Roots - Détails des payloads
-
-Le client déclare ses dossiers de travail
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-```json
-{
-  "method": "roots/list"
-}
-```
-
-<p class="text-sm italic">Requête (serveur → client)</p>
-
-</div>
-
-<div>
-
-```json {none|all}
-{
-  "result": {
-    "roots": [
-      {
-        "uri": "file:///home/user/project",
-        "name": "My Project"
-      }
-    ]
-  }
-}
-```
-
-<p class="text-sm italic">Réponse (client → serveur)</p>
-
-</div>
-
-</div>
-
