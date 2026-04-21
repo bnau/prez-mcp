@@ -453,7 +453,7 @@ graph LR
 ---
 layout: section-with-header
 title: Roots
-subtitle: Le client indique un dossier de travail au serveur
+subtitle: Le client indique des URIs au serveur
 section: "06"
 sectionName: "Fonctionnalités client"
 slideName: "Roots"

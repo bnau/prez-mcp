@@ -115,7 +115,7 @@ Handshake avec négociation des capabilities
 
 <div>
 
-```json {all|7-10}
+```json
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -140,7 +140,7 @@ Handshake avec négociation des capabilities
 
 <div>
 
-```json {all|6-10}
+```json
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -180,7 +180,7 @@ Appels de tools/resources/prompts
 
 <div>
 
-```json {all|4}
+```json
 {
   "jsonrpc": "2.0",
   "id": 2,
@@ -194,7 +194,7 @@ Appels de tools/resources/prompts
 
 <div>
 
-```json {all|6-10}
+```json
 {
   "jsonrpc": "2.0",
   "id": 2,
