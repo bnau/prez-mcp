@@ -82,9 +82,9 @@ slideName: "Bonnes pratiques et sécurité"
 
 * Tool shadowing
 >  _Le serveur propose un tool avec une description similaire à un tool légitime_
-</v-click>
 
 ## Solutions
+</v-click>
 
 ---
 layout: image
